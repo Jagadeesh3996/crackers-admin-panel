@@ -1,0 +1,19 @@
+
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "https://asrpyropark.com/"
+</IfModule>
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Add .php internally if the file exists without the extension
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME}.php -f
+    RewriteRule ^(.+?)/?$ $1.php [L]
+    
+    # Remove .php from the URL when users include it explicitly
+    RewriteCond %{THE_REQUEST} \s/+(.*?/)?(?:index)?(.*?)\.php[\s?] [NC]
+    RewriteRule ^ /%1%2 [R=301,L,NE]
+    
+    # Error Document Configuration
+    ErrorDocument 404 /404.php
+</IfModule>

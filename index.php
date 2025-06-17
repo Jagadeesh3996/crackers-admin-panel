@@ -1,0 +1,288 @@
+<?php
+    include('./utilities/session.php');
+
+    // Fetch data from the database
+    $query = "SELECT p.*, c.discount FROM tbl_product p JOIN tbl_category c ON p.category = c.name WHERE p.status >= '1' and c.status = '1' GROUP BY CAST(SUBSTRING_INDEX(p.alignment, ' ', 1) AS UNSIGNED), SUBSTRING(p.alignment, LOCATE(' ', p.alignment) + 1) ASC";
+
+    $result = mysqli_query($conn, $query);
+    $totalProduct = mysqli_num_rows($result);
+
+    // Fetch data from the database
+    $query2 = "SELECT * FROM tbl_orders GROUP BY order_id";
+    $result2 = mysqli_query($conn, $query2);
+    $totalEstimate = mysqli_num_rows($result2);
+
+    // Fetch data from the database
+    $todayDate = date("Y-m-d");
+    $query3 = "SELECT * FROM tbl_orders WHERE date='$todayDate' GROUP BY order_id";
+    $result3 = mysqli_query($conn, $query3);
+    $todayOrder = mysqli_num_rows($result3);
+
+    // Fetch data from the database
+    $query4 = "SELECT * FROM tbl_billing GROUP BY bid";
+    $result4 = mysqli_query($conn, $query4);
+    $totalBilling = mysqli_num_rows($result4);
+?>
+<!Doctype html>
+<html lang="en" dir="ltr">
+
+    <!-- head Start -->
+    <?php include('./utilities/head.php'); ?>
+    <!-- head END -->
+
+    <body>
+        <!-- loader Start -->
+        <?php include('./utilities/loader.php'); ?>
+        <!-- loader END -->
+
+        <!-- sidenav Start -->
+        <?php include('./utilities/side_nav.php'); ?>
+        <!-- sidenav END -->
+
+        <!-- Main Content Start -->
+        <main class="main-content">
+            <div class="position-relative iq-banner">
+                <!--topnav Start-->
+                <?php include('./utilities/top_nav.php') ?>
+                <!--topnav End-->
+
+                <!-- header Start -->
+                <?php include('./utilities/header.php') ?>         
+                <!-- header End -->
+            </div>
+
+            <!-- hero section start -->
+            <div class="conatiner-fluid content-inner mt-n5 py-0">
+                <div class="row">
+                    <div class="col-md-12 col-lg-12">
+                        <div class="row row-cols-1">
+                            <div class="overflow-hidden d-slider1 ">
+                                <ul  class="p-0 m-0 mb-2 swiper-wrapper list-inline">
+                                    <li class="swiper-slide card card-slide" data-aos="fade-up" data-aos-delay="700">
+                                        <div class="card-body">
+                                            <div class="progress-widget">
+                                                <svg fill="none" width="50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                                    <path class="dasicon" d="M547.6 103.8L490.3 13.1C485.2 5 476.1 0 466.4 0H109.6C99.9 0 90.8 5 85.7 13.1L28.3 103.8c-29.6 46.8-3.4 111.9 51.9 119.4c4 .5 8.1 .8 12.1 .8c26.1 0 49.3-11.4 65.2-29c15.9 17.6 39.1 29 65.2 29c26.1 0 49.3-11.4 65.2-29c15.9 17.6 39.1 29 65.2 29c26.2 0 49.3-11.4 65.2-29c16 17.6 39.1 29 65.2 29c4.1 0 8.1-.3 12.1-.8c55.5-7.4 81.8-72.5 52.1-119.4zM499.7 254.9l-.1 0c-5.3 .7-10.7 1.1-16.2 1.1c-12.4 0-24.3-1.9-35.4-5.3V384H128V250.6c-11.2 3.5-23.2 5.4-35.6 5.4c-5.5 0-11-.4-16.3-1.1l-.1 0c-4.1-.6-8.1-1.3-12-2.3V384v64c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V384 252.6c-4 1-8 1.8-12.3 2.3z"/>
+                                                </svg>
+                                                <div class="progress-detail">
+                                                    <h5 class="mb-2">Total Product</h5>
+                                                    <h4 class="counter"><?= $totalProduct ?></h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="swiper-slide card card-slide" data-aos="fade-up" data-aos-delay="800">
+                                        <div class="card-body">
+                                            <div class="progress-widget">
+                                                <svg width="40" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                                                    <path class="dasicon" d="M0 64C0 28.7 28.7 0 64 0H224V128c0 17.7 14.3 32 32 32H384V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0L384 128z"/>
+                                                </svg>
+                                                <div class="progress-detail">
+                                                    <h5 class="mb-2">Total Estimate</h5>
+                                                    <h4 class="counter"><?= $totalEstimate ?></h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="swiper-slide card card-slide" data-aos="fade-up" data-aos-delay="900">
+                                        <div class="card-body">
+                                            <div class="progress-widget">
+                                                <svg width="40" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                                    <path class="dasicon" d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/>
+                                                </svg>
+                                                <div class="progress-detail">
+                                                    <h5 class="mb-2">Today Esitmate</h5>
+                                                    <h4 class="counter"><?= $todayOrder ?></h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="swiper-slide card card-slide" data-aos="fade-up" data-aos-delay="1000">
+                                        <div class="card-body">
+                                            <div class="progress-widget">
+                                                <svg width="40" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+                                                    <path class="dasicon" d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zM432 248a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"/>
+                                                </svg>
+                                                <div class="progress-detail">
+                                                    <h5 class="mb-2">Total Billing</h5>
+                                                    <h4 class="counter"><?= $totalBilling ?></h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <!-- <div class="swiper-button swiper-button-next"></div>
+                                <div class="swiper-button swiper-button-prev"></div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-12">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card" data-aos="fade-up" data-aos-delay="800">
+                                    <div class="flex-wrap card-header d-flex justify-content-between align-items-center">
+                                        <div class="header-title d-flex">
+                                            <div>
+                                                <input type="checkbox" name="sales" id="sales" class="salesbox" oninput="schange()" />
+                                                <label for="sales" class="salesbtn pt-1 text-white"></label>
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" name="order" id="order" class="orderbox" oninput="ochange()" />
+                                                <label for="order" class="orderbtn pt-1 text-white">Order</label>
+                                            </div>
+                                        </div>
+                                        <div class="dropdown">
+                                            <select name="period" id="period" class="cr-p p-1 text-light rounded-3 bg-color" onchange="period()">
+                                                <option value="All">All Time</option>
+                                                <option value="7">Last 7 days</option>
+                                                <option value="30">Last 30 days</option>
+                                                <option value="365">Last 365 days</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="lineChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- hero section end -->
+
+            <!-- Footer Section Start -->
+            <?php include('./utilities/footer.php') ?>
+            <!-- Footer Section End -->
+        </main>
+        <!-- Main Content End -->
+
+        <!-- script Start -->
+        <?php include('./utilities/script.php') ?>
+        <!-- script End -->
+
+        <script>
+            let pi = 0; salesList = []; ordersList=[];
+            const chart = (listX, value, label) => {
+                const maxValue = Math.max(...value);
+                if (pi) {
+                    pic.destroy();
+                }
+                let color = (label == "Sales") ? "#008000" : "#ffc107";
+                const data = {
+                    labels: [...listX],
+                    datasets: [{
+                        label: label,
+                        data: [...value],
+                        fill: true,
+                        borderColor: color,
+                        tension: 0.1
+                    }],
+                };
+                const config = {
+                    type: 'line',
+                    data: data,
+                    options: {
+                        scales: {
+                            y: {
+                                suggestedMin: 0, // Minimum value
+                                suggestedMax: (maxValue + 2), // Maximum value
+                            }
+                        }
+                    },
+                };
+                pic = new Chart($("#lineChart"),  config);
+                pi++;
+            };
+            const schange = ()=>{
+                if($("#sales").prop("checked")){
+                    $("#sales").prop("checked", true);
+                    $("#order").prop("checked", false);
+                    period();
+                }else{
+                    $("#sales").prop("checked", false);
+                    $("#order").prop("checked", true);
+                    period();
+                }
+            };
+            const ochange = ()=>{
+                if($("#order").prop("checked")){
+                    $("#sales").prop("checked", false);
+                    $("#order").prop("checked", true);
+                    period();
+                }else{
+                    $("#sales").prop("checked", true);
+                    $("#order").prop("checked", false);
+                    period();
+                }
+            };
+            $(document).ready(function(){
+                $.ajax({
+                    type: 'POST',
+                    url: '<?= $admin_url ?>/backend/chart/',
+                    data: { req_type: 'getSales'},
+                    success: (res)=>{
+                        const result = JSON.parse(res);
+                        if(result.status){
+                            salesList = [...result.data];
+                            period();
+                        }else{
+                            Swal.fire({
+                                title: res.trim(),
+                                icon: 'error',
+                            });
+                        }
+                    },
+                    error: (error)=>{
+                        console.log(error);
+                    }
+                });
+                $.ajax({
+                    type: 'POST',
+                    url: '<?= $admin_url ?>/backend/chart/',
+                    data: { req_type: 'getOrders'},
+                    success: (res)=>{
+                        const result = JSON.parse(res);
+                        if(result.status){
+                            ordersList = [...result.data];
+                            period();
+                        }else{
+                            Swal.fire({
+                                title: res.trim(),
+                                icon: 'error',
+                            });
+                        }
+                    },
+                    error: (error)=>{
+                        console.log(error);
+                    }
+                });
+                $("#sales").prop("checked", true);
+            });
+            const filterDataByDateRange = (data, startDate, endDate)=>{
+                return data.filter(item => {
+                    const ndate = new Date(item.date);
+                    return ndate >= startDate && ndate <= endDate;
+                });
+            };
+            const period = ()=>{
+                const time = $("#period").val();
+                let today = new Date(); 
+                let endDate = new Date(today.getFullYear()+'-'+String(today.getMonth() + 1).padStart(2, '0')+'-'+String(today.getDate()).padStart(2, '0'));
+                let startDate; 
+                if(time == "All"){
+                    let dates = ($("#sales").prop("checked")) ? salesList.map(item => item.date) : ordersList.map(item => item.date);
+                    const dateObjects = dates.map(dateString => new Date(dateString));
+                    startDate = new Date(Math.min(...dateObjects));
+                } else {
+                    today.setDate(today.getDate() - time);
+                    startDate = new Date(today.getFullYear()+'-'+String(today.getMonth() + 1).padStart(2, '0')+'-'+String(today.getDate()).padStart(2, '0'));
+                }
+                let filterData = ($("#sales").prop("checked")) ? filterDataByDateRange(salesList, startDate, endDate) : filterDataByDateRange(ordersList, startDate, endDate);
+                let listX = filterData.map(item => item.date);
+                let sales = filterData.map(item => item.value);
+                ($("#sales").prop("checked")) ? chart(listX, sales , "Sales") : chart(listX, sales , "Orders") ;
+            };
+        </script>
+    </body>
+</html>
