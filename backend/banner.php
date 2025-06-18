@@ -18,7 +18,6 @@ function Add($table)
         $image_tmp_name = $_FILES['image']['tmp_name'];
         $imageFileType = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
         $image_name = uniqid() . '.webp';
-        // $image_name = uniqid() . '.' . pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
 
         // Choose a directory to store the uploaded images
         $upload_directory = '../uploads/homebanners';
@@ -66,7 +65,6 @@ function Add($table)
             echo "Sorry! File should be less than 3 mb.";
             return;
         } else {
-            // if (move_uploaded_file($image_tmp_name, $target_path)) {
             if (imagewebp($image, $target_path)) {
                 imagedestroy($image);
                 $addquery = "INSERT INTO $table (banner) VALUES ('$image_name')";

@@ -24,6 +24,7 @@ $active = basename($_SERVER['PHP_SELF']); //get active page from url
         <div class="sidebar-list">
             <!-- Sidebar Menu Start -->
             <ul class="navbar-nav iq-main-menu" id="sidebar-menu">
+                
                 <li class="nav-item">
                     <a class="nav-link index" aria-current="page" href="<?= $admin_url ?>/">
                         <i class="icon">
@@ -34,6 +35,7 @@ $active = basename($_SERVER['PHP_SELF']); //get active page from url
                         <span class="item-name">Dashboard</span>
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link homebanner scrollbar" data-bs-toggle="collapse" href="#horizontal-menu1" role="button" aria-expanded="false" aria-controls="horizontal-menu">
                         <i class="icon">
@@ -79,6 +81,7 @@ $active = basename($_SERVER['PHP_SELF']); //get active page from url
                         </li> -->
                     </ul>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link coupon category product section" data-bs-toggle="collapse" href="#horizontal-menu" role="button" aria-expanded="false" aria-controls="horizontal-menu">
                         <i class="icon">
@@ -96,21 +99,8 @@ $active = basename($_SERVER['PHP_SELF']); //get active page from url
                         </i>
                     </a>
                     <ul class="sub-nav collapse" id="horizontal-menu" data-bs-parent="#sidebar-menu">
-                        <!-- <li class="nav-item">
-                            <a class="nav-link section" href="../dashboard/section.php">
-                                <i class="icon">
-                                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
-                                        <g>
-                                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
-                                        </g>
-                                    </svg>
-                                </i>
-                                <i class="sidenav-mini-icon"> S </i>
-                                <span class="item-name"> Section </span>
-                            </a>
-                        </li> -->
                         <li class="nav-item">
-                            <a class="nav-link category" href="../dashboard/category.php">
+                            <a class="nav-link category" href="<?= $admin_url ?>/pages/category/">
                                 <i class="icon">
                                     <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                                         <g>
@@ -123,7 +113,7 @@ $active = basename($_SERVER['PHP_SELF']); //get active page from url
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link product" href="../dashboard/product.php">
+                            <a class="nav-link product" href="<?= $admin_url ?>/pages/product/">
                                 <i class="icon">
                                     <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                                         <g>
@@ -136,7 +126,7 @@ $active = basename($_SERVER['PHP_SELF']); //get active page from url
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link coupon" href="../dashboard/coupon.php">
+                            <a class="nav-link coupon" href="<?= $admin_url ?>/pages/coupon/">
                                 <i class="icon svg-icon">
                                     <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                                         <g>
@@ -150,6 +140,7 @@ $active = basename($_SERVER['PHP_SELF']); //get active page from url
                         </li>
                     </ul>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link orders" aria-current="page" href="../dashboard/orders.php">
                         <i class="icon">

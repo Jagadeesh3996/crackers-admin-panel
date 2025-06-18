@@ -1,20 +1,18 @@
 <?php
-include("../db.php");
+include("../utilities/db.php");
 
 function Fetch()
 {
     extract($_REQUEST);
     global $conn;
-    // Query to fetch state details
+
     $query1 = "SELECT * FROM tbl_category WHERE id = '$id'";
     $result1 = mysqli_query($conn, $query1);
 
     if ($result1) {
         $data = mysqli_fetch_assoc($result1);
-        // Return state details in JSON format
         echo json_encode(['status' => true, 'data' => $data]);
     } else {
-        // Return an error message in JSON format
         echo json_encode(['status' => false, 'error' => mysqli_error($conn)]);
     }
 }
@@ -23,7 +21,7 @@ function Add()
 {
     extract($_REQUEST);
     global $conn;
-    // query
+
     $query2 = "INSERT INTO tbl_category (name, discount, alignment) VALUES ('$name', '$discount', '$alignment')";
     if (mysqli_query($conn, $query2)) {
         echo "Success";
@@ -36,8 +34,10 @@ function Delete()
 {
     extract($_REQUEST);
     global $conn;
-    // query
-    $query3 = "UPDATE tbl_category SET status = '0' WHERE id = '$id' ";
+    
+    $query3 = "UPDATE tbl_category SET status = 0 WHERE id = '$id' ";
+    // $query3 = "DELETE FROM tbl_category WHERE id = '$id'";
+
     if (mysqli_query($conn, $query3)) {
         echo "Success";
     } else {
@@ -49,7 +49,7 @@ function Edit()
 {
     extract($_REQUEST);
     global $conn;
-    // query
+    
     $query4 = "UPDATE tbl_category SET name = '$name', discount = '$discount', alignment = '$alignment' WHERE id = '$id'";
     if (mysqli_query($conn, $query4)) {
         echo "Success";
@@ -64,7 +64,7 @@ function Import()
     global $conn;
 
     // Define allowed headers (database columns)
-    // $allowed_headers = ['column1', 'column2', 'column3']; // Replace with actual column names
+    $allowed_headers = ['name', 'discount', 'alignment']; // Replace with actual column names
 
 
     // Check the image
@@ -78,28 +78,9 @@ function Import()
         // Assuming the first row contains column headers
         $headers = array_shift($csv_data);
 
-        try {
-            // Iterate through the CSV data and insert into the database
-            foreach ($csv_data as $row) {
-                $query5 = "INSERT INTO tbl_category (" . implode(',', $headers) . ") VALUES ('" . implode("','", $row) . "')";
-                if (!mysqli_query($conn, $query5)) {
-                    echo "Error: " . mysqli_error($conn);
-                }
-            }
-            echo "Success";
-        } catch (Exception $e) {
-            echo "Error: " . $e->getMessage();
-        }
         // try {
         //     foreach ($csv_data as $row) {
-        //         // Map row data to corresponding allowed headers
-        //         $filtered_row = array_combine($headers, $row);
-        //         $filtered_row = array_intersect_key($filtered_row, array_flip($allowed_headers));
-
-        //         // Construct the SQL query
-        //         $query5 = "INSERT INTO tbl_category (" . implode(',', array_keys($filtered_row)) . ") 
-        //                    VALUES ('" . implode("','", array_values($filtered_row)) . "')";
-
+        //         $query5 = "INSERT INTO tbl_category (" . implode(',', $headers) . ") VALUES ('" . implode("','", $row) . "')";
         //         if (!mysqli_query($conn, $query5)) {
         //             echo "Error: " . mysqli_error($conn);
         //         }
@@ -108,6 +89,24 @@ function Import()
         // } catch (Exception $e) {
         //     echo "Error: " . $e->getMessage();
         // }
+        try {
+            foreach ($csv_data as $row) {
+                // Map row data to corresponding allowed headers
+                $filtered_row = array_combine($headers, $row);
+                $filtered_row = array_intersect_key($filtered_row, array_flip($allowed_headers));
+
+                // Construct the SQL query
+                $query5 = "INSERT INTO tbl_category (" . implode(',', array_keys($filtered_row)) . ") 
+                           VALUES ('" . implode("','", array_values($filtered_row)) . "')";
+
+                if (!mysqli_query($conn, $query5)) {
+                    echo "Error: " . mysqli_error($conn);
+                }
+            }
+            echo "Success";
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
     } else {
         echo "File Not Found!";
     }

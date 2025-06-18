@@ -2,7 +2,7 @@
 include('../utilities/session.php');
 
 // Fetch homebanner from the database
-$query = "SELECT * FROM tbl_homebanner WHERE status = 1 ORDER BY id asc";
+$query = "SELECT * FROM tbl_homebanner WHERE status = 1 ORDER BY id ASC";
 $result = mysqli_query($conn, $query);
 $hbanner = mysqli_fetch_all($result, MYSQLI_ASSOC);
 ?>
