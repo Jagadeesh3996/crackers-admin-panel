@@ -17,7 +17,7 @@ function Add($table)
         $upload_directory = '../uploads/homebanners';
 
         // Move the uploaded image to the chosen directory
-        $target_path = $upload_directory .'/' . $image_name;
+        $target_path = $upload_directory . '/' . $image_name;
 
         // Check if the directory already exists
         if (!file_exists($upload_directory)) {
@@ -50,11 +50,11 @@ function Add($table)
                 exit;
         }
 
-
         if ($_FILES["image"]["size"] > (3 * 1024 * 1024)) { // Check file size max - 3mb
             echo "Sorry! File should be less than 3 mb.";
             return;
         } else {
+            // if (move_uploaded_file($image_tmp_name, $target_path)) {
             if (imagewebp($image, $target_path)) {
                 $addquery = "INSERT INTO $table (banner) VALUES ('$image_name')";
                 $addresult = mysqli_query($conn, $addquery);
@@ -66,18 +66,6 @@ function Add($table)
             } else {
                 echo "Sorry, there was an error in uploading this file.";
             }
-
-            // if (move_uploaded_file($image_tmp_name, $target_path)) {
-            //     $query4 =  "UPDATE tbl_portfolio_details SET thump_path='$save_path' WHERE id = '$new_id'";
-            //     $result4 = mysqli_query($conn, $query4);
-            //     if ($result4) {
-            //         echo 'Success';
-            //     } else {
-            //         echo 'Sorry! Error in Uploading this data.';
-            //     }
-            // } else {
-            //     echo "Sorry! Error in Adding this data.";
-            // }
         }
     } else {
         echo "Sorry! File not found.";

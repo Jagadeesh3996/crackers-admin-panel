@@ -5,10 +5,10 @@
     <script src="<?= $admin_url ?>/assets/js/core/external.min.js"></script>
 
     <!-- Widgetchart Script -->
-    <script src="<?= $admin_url ?>/assets/js/charts/widgetcharts.js"></script>
+    <!-- <script src="<?= $admin_url ?>/assets/js/charts/widgetcharts.js"></script> -->
 
     <!-- mapchart Script -->
-    <script src="<?= $admin_url ?>/assets/js/charts/vectore-chart.js"></script>
+    <!-- <script src="<?= $admin_url ?>/assets/js/charts/vectore-chart.js"></script> -->
     <script src="<?= $admin_url ?>/assets/js/charts/dashboard.js"></script>
 
     <!-- fslightbox Script -->
@@ -33,7 +33,8 @@
     <script src="<?= $admin_url ?>/assets/js/sweetalert2.all.min.js"></script>
 
     <!-- Chart js CDN link -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="<?= $admin_url ?>/assets/js/charts/chart.min.js"></script>
+
 
     <script>
         let active = "<?= $active ?>";

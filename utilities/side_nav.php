@@ -96,7 +96,7 @@ $active = basename($_SERVER['PHP_SELF']); //get active page from url
                         </i>
                     </a>
                     <ul class="sub-nav collapse" id="horizontal-menu" data-bs-parent="#sidebar-menu">
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a class="nav-link section" href="../dashboard/section.php">
                                 <i class="icon">
                                     <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
@@ -108,7 +108,7 @@ $active = basename($_SERVER['PHP_SELF']); //get active page from url
                                 <i class="sidenav-mini-icon"> S </i>
                                 <span class="item-name"> Section </span>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="nav-item">
                             <a class="nav-link category" href="../dashboard/category.php">
                                 <i class="icon">
