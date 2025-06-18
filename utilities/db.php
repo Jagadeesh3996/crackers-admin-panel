@@ -28,8 +28,8 @@ $site_data = json_decode($data['shop_details'], true);
 
 // for live
 $domain = $site_data['shop_url'];
-$site_url = $protocol . '://' . $domain;
 $admin_url = $protocol . '://newadmin.' . $domain;
+$site_url = $protocol . '://' . $domain;
 $site_name = $site_data['shop_name'];
 $site_code = $site_data['shop_code'];
 $billing_discount = $site_data['billing_discount'];

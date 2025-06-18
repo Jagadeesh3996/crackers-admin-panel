@@ -9,7 +9,7 @@ $active = basename($_SERVER['PHP_SELF']); //get active page from url
                 <img class="icon-30" src="<?= $admin_url ?>/assets/images/logo.png" alt="logo">
             </div>
             <!--logo End-->
-            <h4 class="logo-title ms-2" style="font-size: 18px;">Demo Crackers</h4>
+            <h4 class="logo-title ms-2" style="font-size: 18px;">Crackers</h4>
         </a>
         <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
             <i class="icon">
