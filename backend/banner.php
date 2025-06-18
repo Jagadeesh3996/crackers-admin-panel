@@ -7,7 +7,7 @@ function Add($table)
     global $conn;
 
     // Whitelist tables
-    $allowed_tables = ['homebanners'];
+    $allowed_tables = ['tbl_homebanner'];
     if (!in_array($table, $allowed_tables)) {
         echo "Invalid table.";
         exit;
