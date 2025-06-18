@@ -14,10 +14,10 @@ function Add($table)
         $imageFileType = strtolower(pathinfo($image_name, PATHINFO_EXTENSION));
 
         // Choose a directory to store the uploaded images
-        $upload_directory = '../uploads/homebanners/';
+        $upload_directory = '../uploads/homebanners';
 
         // Move the uploaded image to the chosen directory
-        $target_path = $upload_directory . $image_name;
+        $target_path = $upload_directory .'/' . $image_name;
 
         // Check if the directory already exists
         if (!file_exists($upload_directory)) {
