@@ -6,12 +6,19 @@ function Add($table)
     extract($_REQUEST);
     global $conn;
 
+    // Whitelist tables
+    $allowed_tables = ['homebanners'];
+    if (!in_array($table, $allowed_tables)) {
+        echo "Invalid table.";
+        exit;
+    }
+
     // Check the image
     if (isset($_FILES['image'])) {
         $image_tmp_name = $_FILES['image']['tmp_name'];
+        $imageFileType = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
         $image_name = uniqid() . '.webp';
         // $image_name = uniqid() . '.' . pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-        $imageFileType = strtolower(pathinfo($image_name, PATHINFO_EXTENSION));
 
         // Choose a directory to store the uploaded images
         $upload_directory = '../uploads/homebanners';
@@ -50,12 +57,18 @@ function Add($table)
                 exit;
         }
 
+        if (!$image) {
+            echo "Sorry! Failed to read image.";
+            exit;
+        }
+
         if ($_FILES["image"]["size"] > (3 * 1024 * 1024)) { // Check file size max - 3mb
             echo "Sorry! File should be less than 3 mb.";
             return;
         } else {
             // if (move_uploaded_file($image_tmp_name, $target_path)) {
             if (imagewebp($image, $target_path)) {
+                imagedestroy($image);
                 $addquery = "INSERT INTO $table (banner) VALUES ('$image_name')";
                 $addresult = mysqli_query($conn, $addquery);
                 if ($addresult) {
