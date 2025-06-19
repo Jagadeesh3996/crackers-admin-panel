@@ -1,0 +1,13 @@
+{
+    "noto sans tamil": {
+        "100": "\/opt\/lampp\/htdocs\/kickvy\/admin\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/noto_sans_tamil_100_ece2fbb97418c1593e74fc05ccf8ae72",
+        "200": "\/opt\/lampp\/htdocs\/kickvy\/admin\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/noto_sans_tamil_200_fc344a9bb4025e0ff45b9407d5d2ebce",
+        "300": "\/opt\/lampp\/htdocs\/kickvy\/admin\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/noto_sans_tamil_300_a487cf3029b4e736eb44ee94d83a8314",
+        "normal": "\/opt\/lampp\/htdocs\/kickvy\/admin\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/noto_sans_tamil_normal_3d1b01f4035ba5dc68fa508111655106",
+        "500": "\/opt\/lampp\/htdocs\/kickvy\/admin\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/noto_sans_tamil_500_c9b39a5957b95a6858ae9c1bb6bc717a",
+        "600": "\/opt\/lampp\/htdocs\/kickvy\/admin\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/noto_sans_tamil_600_b1219d3b16844f2bd72023b97c0c5160",
+        "bold": "\/opt\/lampp\/htdocs\/kickvy\/admin\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/noto_sans_tamil_bold_c3f45d2405a8844b1cc44c4032c9cefe",
+        "800": "\/opt\/lampp\/htdocs\/kickvy\/admin\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/noto_sans_tamil_800_90372e52761dd1b56a5b2fe88ea68569",
+        "900": "noto_sans_tamil_900_e129b5d1623539bab4ee7dc86f6cf8b3"
+    }
+}

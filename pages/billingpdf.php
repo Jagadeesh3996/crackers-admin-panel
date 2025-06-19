@@ -6,6 +6,7 @@ include("../utilities/db.php");
 use Dompdf\Dompdf;
 
 $dompdf = new Dompdf();
+$dompdf->set_option('isRemoteEnabled', true);
 
 // check url parameter  is set or not
 if (isset($_GET['bid'])) {
@@ -103,8 +104,8 @@ if ($item = mysqli_fetch_array($result)) {
                                     <td colspan="4" class="bline right">Email : <b>' . $site_email . '</b></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2" class="bline"><center><img src="' . $admin_url . '/assets/images/logo.png" alt="logo" ></center></td>
-                                    <td colspan="5" class="bline"><center>
+                                    <td colspan="3" class="bline"><center><img height="100" src="' . $admin_url . '/assets/images/logo.png" alt="logo" ></center></td>
+                                    <td colspan="4" class="bline"><center>
                                         <h2><b>' . $site_name . '</b></h2>
                                         <p>' . $site_address . '</p>
                                     </center></td>
