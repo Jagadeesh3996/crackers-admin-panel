@@ -19,6 +19,9 @@ $query = "SELECT * FROM tbl_shopsetting";
 $result = mysqli_query($conn, $query);
 $data = mysqli_fetch_array($result);
 
+// estimate page status
+$site_status = $data['website_status'];
+
 // Site Details
 $site_data = json_decode($data['shop_details'], true);
 

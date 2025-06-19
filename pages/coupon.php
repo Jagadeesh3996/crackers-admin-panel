@@ -356,7 +356,7 @@ $promolist = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
             // add item - start
             $('#addDetails').submit(function(e) {
-                $('#submit').prop('disabled', true).val('Adding');
+                $('#submit').prop('disabled', true).val('Adding...');
                 e.preventDefault();
                 const formData = {
                     'agent': $("#agent").val().trim(),
@@ -412,7 +412,7 @@ $promolist = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
             // Update item - start
             $('#editDetails').submit(function(e) {
-                $('#editSubmit').prop('disabled', true).val('Updating');
+                $('#editSubmit').prop('disabled', true).val('Updating...');
                 e.preventDefault();
                 const formData = {
                     'id': $("#edit_id").val(),

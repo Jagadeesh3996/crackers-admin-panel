@@ -162,7 +162,7 @@ $orderItems = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 <input type="hidden" name="cid" id="cid" value="" />
                 <input type="hidden" name="cphone" id="cphone" value="" />
                 <input type="hidden" name="cemail" id="cemail" value="" />
-                <input type="submit" class="btn btn-success w-100" name="addData" value="Send" />
+                <input type="submit" id="submit" class="btn btn-success w-100" name="addData" value="Send" />
             </form>
             <input id="closePopup" type='button' class="close btn btn-danger w-100 mt-3" value="Close" />
         </div>
@@ -225,6 +225,7 @@ $orderItems = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
         // add - start
         $('#addDetails').submit(function(e) {
+            $('#submit').prop('disabled', true).val('Sending...');
             e.preventDefault();
             let transport = $("#transport").val().trim();
             let lrno = $("#lrno").val().trim();
@@ -245,6 +246,8 @@ $orderItems = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     customClass: {
                         confirmButton: 'my-swal-confirm-button',
                     },
+                }).then(() => {
+                    $('#submit').prop('disabled', false).val('Send');
                 });
             } else {
                 $.ajax({
@@ -269,6 +272,8 @@ $orderItems = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                 customClass: {
                                     confirmButton: 'my-swal-confirm-button',
                                 },
+                            }).then(() => {
+                                $('#submit').prop('disabled', false).val('Send');
                             });
                         }
                     },

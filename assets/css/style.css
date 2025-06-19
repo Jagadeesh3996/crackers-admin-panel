@@ -1,29 +1,28 @@
-
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
+  -webkit-appearance: none;
 }
 /* Firefox */
-input[type=number] {
-    -moz-appearance: textfield;
+input[type="number"] {
+  -moz-appearance: textfield;
 }
-:root{
-    --logo-color: #ED1C24;
-    --white: #fff;
-    --black: #000;
-    --gray: #808080;
-    --green: #008000;
-    --red: #ff0000;
+:root {
+  --logo-color: #ed1c24;
+  --white: #fff;
+  --black: #000;
+  --gray: #808080;
+  --green: #008000;
+  --red: #ff0000;
 }
-.bg-color{
-    background-color: var(--logo-color) !important;
+.bg-color {
+  background-color: var(--logo-color) !important;
 }
-.logoColor{
-    color: var(--logo-color);
-}   
-.dasicon{
-    fill: var(--logo-color);
+.logoColor {
+  color: var(--logo-color);
+}
+.dasicon {
+  fill: var(--logo-color);
 }
 
 /* popup section - start */
@@ -31,324 +30,355 @@ input[type=number] {
 #editoverlay,
 #importoverlay,
 .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
 #popup,
 #editpopup,
 .modal-content {
-    background-color: var(--white);
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    position: absolute;
-    width: 90%;
-    animation: move 0.5s linear;
+  background-color: var(--white);
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  width: 90%;
+  animation: move 0.5s linear;
 }
 @keyframes move {
-    0%{
-        transform: scale(0.2);
-        opacity: 0.3;
-    }
+  0% {
+    transform: scale(0.2);
+    opacity: 0.3;
+  }
 }
 
-@media (min-width:992px) {
-    #popup,
-    #editpopup,
-    .modal-content {
-        width: 50%;
-    }
+@media (min-width: 992px) {
+  #popup,
+  #editpopup,
+  .modal-content {
+    width: 50%;
+  }
 }
 /* popup section - end */
 
-
 /* billing - start*/
 /* table section- start */
-.b-0{
-    border: none !important;
+.b-0 {
+  border: none !important;
 }
-.cr{
-    cursor: not-allowed;
+.cr {
+  cursor: not-allowed;
 }
-.cr-p{
-    cursor: pointer !important;
+.cr-p {
+  cursor: pointer !important;
 }
-.flex{
-    display:  flex;
+.flex {
+  display: flex;
 }
 .wbig,
-.wbig input{
-    width: 250px !important;
-    text-align: left !important;
-    border: none;
+.wbig input {
+  width: 250px !important;
+  text-align: left !important;
+  border: none;
 }
 .wnor,
-.wnor input{
-    width: 90px !important;
-    border: none;
+.wnor input {
+  width: 90px !important;
+  border: none;
 }
-table tr td{
-    height: 50px !important;
-    vertical-align: center !important;
-    text-align: center;
-    padding: 10px !important;
+table tr td {
+  height: 50px !important;
+  vertical-align: center !important;
+  text-align: center;
+  padding: 10px !important;
 }
-table tr th{
-    padding: 10px !important;
-    text-align: center;
-    font-weight: 600;
+table tr th {
+  padding: 10px !important;
+  text-align: center;
+  font-weight: 600;
 }
-table tr td input{
-    text-align: center;
+table tr td input {
+  text-align: center;
 }
 /* table section - end */
 /* Search item - start */
-.itli{
-    display: none;
-    width: 250px;
-    background-color: var(--white);
-    color: var(--black);
-    overflow: auto;
-    height: 200px;
-    z-index: 9999;
-    list-style: none;
-    padding: 10px;
-    position: absolute;
-    border: 1px solid var(--black);
-    cursor: pointer !important;
+.itli {
+  display: none;
+  width: 250px;
+  background-color: var(--white);
+  color: var(--black);
+  overflow: auto;
+  height: 200px;
+  z-index: 9999;
+  list-style: none;
+  padding: 10px;
+  position: absolute;
+  border: 1px solid var(--black);
+  cursor: pointer !important;
 }
 .cform input,
 .cform select,
-.cform textarea{
-    width: 250px;
-    padding: 10px;
-    border-radius: 10px;
+.cform textarea {
+  width: 250px;
+  padding: 10px;
+  border-radius: 10px;
 }
-.cform textarea{
-    height: 100px;
+.cform textarea {
+  height: 100px;
 }
 /* Search item - end */
 /* GST button - start */
-.gstbox { 
-    display : none;
+.gstbox {
+  display: none;
 }
 .gstbtn {
-    position : relative ;
-    display : inline-block;
-    width : 120px;
-    height : 40px;
-    background-color: transparent;
-    border-radius: 10px;
-    border: 2px solid var(--gray);
-    cursor: pointer;
+  position: relative;
+  display: inline-block;
+  width: 120px;
+  height: 40px;
+  background-color: transparent;
+  border-radius: 10px;
+  border: 2px solid var(--gray);
+  cursor: pointer;
 }
 .gstbtn:before {
-    content: 'With GST';
-    position: absolute;
-    width: 120px;
-    height: 40px;
-    border-radius: 10px;
-    background-color: var(--green);
-    top: -1px; 
-    left: -1px;
-    transition: all 0.5s;
-    padding-top: 8px;
+  content: "With GST";
+  position: absolute;
+  width: 120px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: var(--green);
+  top: -1px;
+  left: -1px;
+  transition: all 0.5s;
+  padding-top: 8px;
 }
 .gstbtn:after {
-    content: 'Without GST';
-    position: absolute;
-    width: 120px;
-    height: 40px;
-    border-radius: 10px;
-    background-color: var(--red);
-    top: -1px; 
-    left: -1px;
-    transition: all 0.5s;
-    padding-top: 8px;
+  content: "Without GST";
+  position: absolute;
+  width: 120px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: var(--red);
+  top: -1px;
+  left: -1px;
+  transition: all 0.5s;
+  padding-top: 8px;
 }
 .gstbox:checked + .gstbtn:after {
-    display: none;
+  display: none;
 }
 /* GST button - end */
 /* packing button - start */
-.packbox { 
-    display : none;
+.packbox {
+  display: none;
 }
 .packbtn {
-    position : relative ;
-    display : inline-block;
-    width : 200px;
-    height : 40px;
-    background-color: transparent;
-    border-radius: 10px;
-    border: 2px solid var(--gray);
-    cursor: pointer;
+  position: relative;
+  display: inline-block;
+  width: 200px;
+  height: 40px;
+  background-color: transparent;
+  border-radius: 10px;
+  border: 2px solid var(--gray);
+  cursor: pointer;
 }
 .packbtn:before {
-    content: 'With Packing Charge';
-    position: absolute;
-    width: 200px;
-    height: 40px;
-    border-radius: 10px;
-    background-color: var(--green);
-    top: -1px; 
-    left: -1px;
-    transition: all 0.5s;
-    padding-top: 8px;
+  content: "With Packing Charge";
+  position: absolute;
+  width: 200px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: var(--green);
+  top: -1px;
+  left: -1px;
+  transition: all 0.5s;
+  padding-top: 8px;
 }
 .packbtn:after {
-    content: 'Without Packing Charge';
-    position: absolute;
-    width: 200px;
-    height: 40px;
-    border-radius: 10px;
-    background-color: var(--red);
-    top: -1px; 
-    left: -1px;
-    transition: all 0.5s;
-    padding-top: 8px;
+  content: "Without Packing Charge";
+  position: absolute;
+  width: 200px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: var(--red);
+  top: -1px;
+  left: -1px;
+  transition: all 0.5s;
+  padding-top: 8px;
 }
 .packbox:checked + .packbtn:after {
-    display: none;
+  display: none;
 }
 /* packing button - end */
 /* billing - end*/
 
 /* toggle button start - product */
-.togglebox { 
-    display : none;
+.togglebox {
+  display: none;
 }
 .toggle {
-    position : relative ;
-    display : inline-block;
-    width : 72px;
-    height : 37px;
-    background-color: var(--red);
-    border-radius: 30px;
-    border: 2px solid var(--gray);
+  position: relative;
+  display: inline-block;
+  width: 72px;
+  height: 37px;
+  background-color: var(--red);
+  border-radius: 30px;
+  border: 2px solid var(--gray);
 }
 .toggle:after {
-    content: '';
-    position: absolute;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    background-color: var(--gray);
-    top: 0; 
-    left: -1px;
-    transition: all 0.5s;
+  content: "";
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: var(--gray);
+  top: 0;
+  left: -1px;
+  transition: all 0.5s;
 }
 .togglebox:checked + .toggle:after {
-    left : 35px; 
+  left: 35px;
 }
 .togglebox:checked + .toggle {
-    background-color: var(--green);
+  background-color: var(--green);
 }
+.togglebox2 {
+  display: none;
+}
+.toggle2 {
+  position: relative;
+  display: inline-block;
+  width: 174px;
+  height: 35px;
+  background-color: var(--red);
+  border-radius: 30px;
+  border: 2px solid var(--gray);
+}
+.toggle2:after {
+  content: "";
+  position: absolute;
+  width: 78px;
+  height: 34px;
+  border-radius: 30px 0px 0px 30px;
+  background-color: var(--gray);
+  top: -2px;
+  left: -1px;
+  transition: all 0.5s;
+}
+.togglebox2:checked + .toggle2:after {
+  width: 92px;
+  border-radius: 0px 30px 30px 0px;
+  left: 78px;
+}
+.togglebox2:checked + .toggle2 {
+  background-color: var(--green);
+}
+
 /* toggle button end - product */
 
 /* index graph section - start */
 /* sales button - start */
-.salesbox { 
-    display : none;
+.salesbox {
+  display: none;
 }
 .salesbtn {
-    position : relative ;
-    display : inline-block;
-    width : 60px;
-    height : 40px;
-    background-color: transparent;
-    border-radius: 10px;
-    border: 2px solid var(--gray);
-    cursor: pointer;
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 40px;
+  background-color: transparent;
+  border-radius: 10px;
+  border: 2px solid var(--gray);
+  cursor: pointer;
 }
 .salesbtn:before {
-    content: 'Sales';
-    position: absolute;
-    width: 60px;
-    height: 40px;
-    border-radius: 10px;
-    background-color: var(--green);
-    top: -1px; 
-    left: -1px;
-    transition: all 0.5s;
-    padding-top: 8px;
-    padding-left: 8px;
+  content: "Sales";
+  position: absolute;
+  width: 60px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: var(--green);
+  top: -1px;
+  left: -1px;
+  transition: all 0.5s;
+  padding-top: 8px;
+  padding-left: 8px;
 }
 .salesbtn:after {
-    content: 'Sales';
-    position: absolute;
-    width: 60px;
-    height: 40px;
-    border-radius: 10px;
-    background-color: var(--gray);
-    top: -1px; 
-    left: -1px;
-    transition: all 0.5s;
-    padding-top: 8px;
-    padding-left: 8px;
+  content: "Sales";
+  position: absolute;
+  width: 60px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: var(--gray);
+  top: -1px;
+  left: -1px;
+  transition: all 0.5s;
+  padding-top: 8px;
+  padding-left: 8px;
 }
 .salesbox:checked + .salesbtn:after {
-    display: none;
+  display: none;
 }
 /* sales button - end */
 /* order button - start */
-.orderbox { 
-    display : none;
+.orderbox {
+  display: none;
 }
 .orderbtn {
-    position : relative ;
-    display : inline-block;
-    width : 70px;
-    height : 40px;
-    left: 10px;
-    background-color: transparent;
-    border-radius: 10px;
-    border: 2px solid var(--gray);
-    cursor: pointer;
+  position: relative;
+  display: inline-block;
+  width: 70px;
+  height: 40px;
+  left: 10px;
+  background-color: transparent;
+  border-radius: 10px;
+  border: 2px solid var(--gray);
+  cursor: pointer;
 }
 .orderbtn:before {
-    content: 'Orders';
-    position: absolute;
-    width: 70px;
-    height: 40px;
-    border-radius: 10px;
-    background-color: #ffc107;
-    top: -1px; 
-    left: -1px;
-    transition: all 0.5s;
-    padding-top: 8px;
-    padding-left: 8px;
+  content: "Orders";
+  position: absolute;
+  width: 70px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: #ffc107;
+  top: -1px;
+  left: -1px;
+  transition: all 0.5s;
+  padding-top: 8px;
+  padding-left: 8px;
 }
 .orderbtn:after {
-    content: 'Orders';
-    position: absolute;
-    width: 70px;
-    height: 40px;
-    border-radius: 10px;
-    background-color: var(--gray);
-    top: -1px; 
-    left: -1px;
-    transition: all 0.5s;
-    padding-top: 8px;
-    padding-left: 8px;
+  content: "Orders";
+  position: absolute;
+  width: 70px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: var(--gray);
+  top: -1px;
+  left: -1px;
+  transition: all 0.5s;
+  padding-top: 8px;
+  padding-left: 8px;
 }
 .orderbox:checked + .orderbtn:after {
-    display: none;
+  display: none;
 }
 /* order button - end */
 /* index graph section - end */
 
 /* Sweet Alert CSS - start */
 .my-swal-confirm-button {
-    background-color: var(--logo-color) !important;
+  background-color: var(--logo-color) !important;
 }
-  /* Sweet Alert CSS - end */
+/* Sweet Alert CSS - end */

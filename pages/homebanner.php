@@ -151,7 +151,7 @@ $hbanner = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
             // add banner - start
             $('#addDetails').submit(function(e) {
-                $('#addSubmit').prop('disabled', true).val("Adding");
+                $('#addSubmit').prop('disabled', true).val("Adding...");
                 e.preventDefault();
                 const formData = new FormData($(this)[0]);
                 $.ajax({
