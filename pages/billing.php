@@ -602,7 +602,7 @@ $bid = $site_code . date('Y') . 'BILL' . ($id + 1);
                                 confirmButton: 'my-swal-confirm-button',
                             },
                         }).then(() => {
-                            window.open("<?= $admin_url ?>/backend/billingpdf?bid=<?= $bid ?>", "_blank");
+                            window.open("<?= $admin_url ?>/pages/billingpdf?bid=<?= $bid ?>", "_blank");
                             window.location.reload(true);
                         })
                     } else {
