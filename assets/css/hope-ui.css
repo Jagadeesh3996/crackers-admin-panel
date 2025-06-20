@@ -16699,11 +16699,12 @@ thead, tbody, tfoot, tr, td, th {
   z-index: 1250;
 }
 .loader.simple-loader .loader-body {
-  -webkit-background-size: 20% 20%;
-          background-size: 20%;
+  background: url(../images/loader.gif) no-repeat scroll center center;
+  -webkit-background-size: 8% 8%;
+          background-size: 8%;
   width: 100%;
   height: 100%;
-  position: relative;
+  position: relative; 
 }
 
 .credit-card-widget .primary-gradient-card {
@@ -19846,7 +19847,7 @@ body.offcanvas-active {
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
-  padding: 1.125rem 1rem;
+  padding: 0.5rem 1rem;
 }
 .sidebar .navbar-brand svg {
   color: var(--bs-primary);

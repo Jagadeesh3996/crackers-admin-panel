@@ -133,7 +133,6 @@ if ($item = mysqli_fetch_array($result)) {
                                     <td><b>Price (Rs)</b></td>
                                     <td><b>Total (Rs)</b></td>
                                 </tr>';
-
     $k = 1;
     $totalqty = 0;
     $total = 0;

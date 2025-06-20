@@ -62,7 +62,7 @@ function Add($table)
         }
 
         if ($_FILES["image"]["size"] > (3 * 1024 * 1024)) { // Check file size max - 3mb
-            echo "Sorry! File should be less than 3 mb.";
+            echo "Sorry! File should be less than 3mb.";
             return;
         } else {
             if (imagewebp($image, $target_path)) {

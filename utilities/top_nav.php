@@ -3,7 +3,7 @@
         <a href="#" class="navbar-brand">
             <!--Logo start-->
             <div class="logo-main">
-                <img class="icon-30" src="<?= $admin_url ?>/assets/images/full_logo.png" alt="logo">
+                <img height="40px" src="<?= $admin_url ?>/assets/images/full_logo.png" alt="logo">
             </div>
             <!--logo end-->
             <h4 class="logo-title"><?= $site_name ?></h4>
@@ -21,7 +21,7 @@
 
         <!--Logo start-->
         <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
-            <img class="icon-30" src="<?= $admin_url ?>/assets/images/full_logo.png" alt="logo">
+            <img height="40px" src="<?= $admin_url ?>/assets/images/full_logo.png" alt="logo">
         </div>
         <!--logo end-->
     </div>

@@ -1,42 +1,43 @@
 
 <?php
-    include('session.php');
-    require('dompdf/autoload.inc.php');
-    include("db.php");
+include('../utilities/session.php');
+require('../dompdf/autoload.inc.php');
+include("../utilities/db.php");
 
-    use Dompdf\Dompdf;
-    $dompdf = new Dompdf();
+use Dompdf\Dompdf;
 
-    // check url parameter  is set or not
-    if (isset($_GET['invoice'])) {
-        $invoice = $_GET['invoice'];
-    } else {
-        header("Location: invoice.php");
-        exit();
-    }
+$dompdf = new Dompdf();
 
-    // fetch data
-    $query = "select * from tbl_invoice where invoice='$invoice' and status>='1' limit 1";
-    $result = mysqli_query($conn, $query);
-    if($item = mysqli_fetch_array($result)){        
-        $c_name = $item['name'];
-        $c_mobile = $item['mobile'];
-        $c_whatsno = $item['whatsapp'];
-        $c_idproof = $item['id_proof'];
-        $c_idnumber = $item['id_number'];
-        $c_bdate = $item['date'];
-        $c_mop = $item['payment'];
-        $c_address = $item['address'];
-        $c_gstno = $item['gstno'];
-        $c_igst = $item['igst'];
-        $c_sgst = $item['sgst'];
-        $c_pcamt = $item['p_charge'];
-        $c_roAmt = $item['amount'];
-        $c_prdlist = json_decode($item['product_list']);
-        $dateonly = date("d-m-Y");
+// check url parameter  is set or not
+if (isset($_GET['invoice'])) {
+    $invoice = $_GET['invoice'];
+} else {
+    header("Location: $admin_url/pages/invoice/");
+    exit();
+}
 
-        // Create HTML content for the PDF
-        $html = '
+// fetch data
+$query = "SELECT * FROM tbl_invoice WHERE invoice = '$invoice' AND status >= 1 LIMIT 1";
+$result = mysqli_query($conn, $query);
+if ($item = mysqli_fetch_array($result)) {
+    $c_name = $item['name'];
+    $c_mobile = $item['mobile'];
+    $c_whatsno = $item['whatsapp'];
+    $c_idproof = $item['id_proof'];
+    $c_idnumber = $item['id_number'];
+    $c_bdate = $item['date'];
+    $c_mop = $item['payment'];
+    $c_address = $item['address'];
+    $c_gstno = $item['gstno'];
+    $c_igst = $item['igst'];
+    $c_sgst = $item['sgst'];
+    $c_pcamt = $item['p_charge'];
+    $c_roAmt = $item['amount'];
+    $c_prdlist = json_decode($item['product_list']);
+    $dateonly = date("d-m-Y");
+
+    // Create HTML content for the PDF
+    $html = '
                 <!DOCTYPE html>
                 <html>
                     <head>
@@ -99,37 +100,37 @@
                         <main class="main">
                             <table class="bd" style="width:100%" cellspacing="0">
                                 <tr class="bd">
-                                    <td colspan="4" class="bline">Invoice No : <b>'.$invoice.'</b></td>
+                                    <td colspan="4" class="bline">Invoice No : <b>' . $invoice . '</b></td>
                                     <td colspan="1" class="bline center"><b>INVOICE</b></td>
-                                    <td colspan="3" class="bline right">Invoice Date : <b>'.$c_bdate.'</b></td>
+                                    <td colspan="3" class="bline right">Invoice Date : <b>' . $c_bdate . '</b></td>
                                 </tr>
                                 <tr class="bd">
-                                    <td colspan="4" class="bline">Phone : <b>'.$site_mobile_number.', '.$site_alternate_mobile_number.'</b></td>
-                                    <td colspan="4" class="bline right">Email : <b>'.$site_email.'</b></td>
+                                    <td colspan="4" class="bline">Phone : <b>' . $site_mobile_number . ', ' . $site_alternate_mobile_number . '</b></td>
+                                    <td colspan="4" class="bline right">Email : <b>' . $site_email . '</b></td>
                                 </tr>
                                 <tr class="bd">
-                                    <td colspan="4" class="bline">Whatsapp : <b>'.$site_whatsapp_number.'</b></td>
-                                    <td colspan="4" class="bline right">GST No : <b>'.$site_gst_no.'</b></td>
+                                    <td colspan="4" class="bline">Whatsapp : <b>' . $site_whatsapp_number . '</b></td>
+                                    <td colspan="4" class="bline right">GST No : <b>' . $site_gst_no . '</b></td>
                                 </tr>
                                 <tr>
-                                    <td class="bline"></td>
-                                    <td colspan="6" class="bline"><center>
-                                        <h2><b>'.$site_name.'</b></h2>
-                                        <p>'.$site_address.'</p>
+                                    <td colspan="3" class="bline"><center><img height="100" src="' . $admin_url . '/assets/images/logo.png" alt="logo" ></center></td>
+                                    <td colspan="4" class="bline"><center>
+                                        <h2><b>' . $site_name . '</b></h2>
+                                        <p>' . $site_address . '</p>
                                     </center></td>
                                     <td class="bline"></td>
                                 </tr>
                                 <tr>
                                     <td colspan="8" class="none rline">
                                         <h4><center><b>Customer Details</b></center></h4>
-                                        <p class="tamil">Name : <b>'.$c_name.'</b></p>
-                                        <p>Mobile: <b>'.$c_mobile.'</b></p>
-                                        <p>Whatsapp : <b>'.$c_whatsno.'</b></p>
-                                        <p>Id Proof : <b>'.$c_idproof.'</b></p>
-                                        <p>Id Number : <b>'.$c_idnumber.'</b></p>
-                                        <p>Mode of Payment : <b>'.$c_mop.'</b></p>
-                                        <p class="tamil">Address : <b>'.$c_address.'</b></p>
-                                        <p>GST No : <b>'.$c_gstno.'</b></p>
+                                        <p class="tamil">Name : <b>' . $c_name . '</b></p>
+                                        <p>Mobile: <b>' . $c_mobile . '</b></p>
+                                        <p>Whatsapp : <b>' . $c_whatsno . '</b></p>
+                                        <p>Id Proof : <b>' . $c_idproof . '</b></p>
+                                        <p>Id Number : <b>' . $c_idnumber . '</b></p>
+                                        <p>Mode of Payment : <b>' . $c_mop . '</b></p>
+                                        <p class="tamil">Address : <b>' . $c_address . '</b></p>
+                                        <p>GST No : <b>' . $c_gstno . '</b></p>
                                     </td>
                                 </tr>
                                 <tr class="rbd">
@@ -141,60 +142,59 @@
                                     <td><b>Price (Rs)</b></td>
                                     <td><b>Total (Rs)</b></td>
                                 </tr>';
-
-                                $k = 1;
-                                $totalqty = 0;
-                                $total = 0;
-                                foreach($c_prdlist as $key=>$prod){
-                                    $totalqty += $prod->p_qty;
-                                    $total += $prod->p_total;
-                                    $html .= '<tr class="rbd">
-                                                <td>'.$k.'</td>
-                                                <td colspan="2">'.$prod->p_name.'</td>
-                                                <td>'.number_format($prod->p_mrp).'</td>
-                                                <td>'.number_format($prod->p_qty).'</td>
-                                                <td>'.$prod->p_dis.'%</td>
-                                                <td>'.number_format($prod->p_disprice,2).'</td>
-                                                <td>'.number_format($prod->p_total,2).'</td>
-                                            </tr>';
-                                    $k++;
-                                }
-                        $html .= '
+    $k = 1;
+    $totalqty = 0;
+    $total = 0;
+    foreach ($c_prdlist as $key => $prod) {
+        $totalqty += $prod->p_qty;
+        $total += $prod->p_total;
+        $html .= '<tr class="rbd">
+                    <td>' . $k . '</td>
+                    <td colspan="2">' . $prod->p_name . '</td>
+                    <td>' . number_format($prod->p_mrp) . '</td>
+                    <td>' . number_format($prod->p_qty) . '</td>
+                    <td>' . $prod->p_dis . '%</td>
+                    <td>' . number_format($prod->p_disprice, 2) . '</td>
+                    <td>' . number_format($prod->p_total, 2) . '</td>
+                </tr>';
+        $k++;
+    }
+    $html .= '
                                 <tr class="right">
                                     <td colspan="7">Total (Rs) : </td>
-                                    <td><b>'.number_format($total,2).'</b></td>
+                                    <td><b>' . number_format($total, 2) . '</b></td>
                                 </tr>
                                 <tr class="right">
                                     <td colspan="7">IGST (Rs) : </td>
-                                    <td><b>'.number_format($c_igst,2).'</b></td>
+                                    <td><b>' . number_format($c_igst, 2) . '</b></td>
                                 </tr>
                                 <tr class="right">
                                     <td colspan="7">SGST (Rs) : </td>
-                                    <td><b>'.number_format($c_sgst,2).'</b></td>
+                                    <td><b>' . number_format($c_sgst, 2) . '</b></td>
                                 </tr>
                                 <tr class="right">
                                     <td colspan="7">Packing Charge (Rs) : </td>
-                                    <td><b>'.number_format($c_pcamt,2).'</b></td>
+                                    <td><b>' . number_format($c_pcamt, 2) . '</b></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2" class="tline">Total items : <b>'.($k-1).'</b></td>
-                                    <td colspan="3" style="text-align:center;" class="tline">Total Quantity : <b>'.$totalqty.'</b></td>
+                                    <td colspan="2" class="tline">Total items : <b>' . ($k - 1) . '</b></td>
+                                    <td colspan="3" style="text-align:center;" class="tline">Total Quantity : <b>' . $totalqty . '</b></td>
                                     <td colspan="2" class="tline right"><b>Final Amount (Rs) : </b></td>
-                                    <td colspan="1" class="tline right"><b>'.number_format($c_roAmt).'</b></td>
+                                    <td colspan="1" class="tline right"><b>' . number_format($c_roAmt) . '</b></td>
                                 </tr>
                             </table>
                         </main>
                     </body>
                 </html>';
 
-        // Initialize dompdf
-        $dompdf->set_option('enable_html5_parser', TRUE);	    
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('letter', 'portrait');
-        $dompdf->render();
-        $dompdf->stream("'$site_name'_'$invoice'_'$dateonly'.pdf", ["Attachment" => false]);	            
-    } else {
-        header("Location: invoice.php");
-        exit();
-    }
+    // Initialize dompdf
+    $dompdf->set_option('enable_html5_parser', TRUE);
+    $dompdf->loadHtml($html);
+    $dompdf->setPaper('letter', 'portrait');
+    $dompdf->render();
+    $dompdf->stream("'$site_name'_'$invoice'_'$dateonly'.pdf", ["Attachment" => false]);
+} else {
+    header("Location: $admin_url/pages/invoice/");
+    exit();
+}
 ?>

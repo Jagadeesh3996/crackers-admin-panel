@@ -604,7 +604,7 @@ $bid = $site_code . date('Y') . 'BILL' . ($id + 1);
                         }).then(() => {
                             window.open("<?= $admin_url ?>/pages/billingpdf?bid=<?= $bid ?>", "_blank");
                             window.location.reload(true);
-                        })
+                        });
                     } else {
                         Swal.fire({
                             title: res.trim(),

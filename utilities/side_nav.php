@@ -1,15 +1,16 @@
 <?php
 $active = basename($_SERVER['PHP_SELF']); //get active page from url
 ?>
-<aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all ">
+<aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all">
+    
     <div class="sidebar-header d-flex align-items-center justify-content-start">
         <a href="#" class="navbar-brand pe-0">
             <!--Logo start-->
             <div class="logo-main">
-                <img class="icon-30" src="<?= $admin_url ?>/assets/images/logo.png" alt="logo">
+                <img height="40px" src="<?= $admin_url ?>/assets/images/logo.png" alt="logo">
             </div>
             <!--logo End-->
-            <h4 class="logo-title ms-2" style="font-size: 18px;">Crackers</h4>
+            <h4 class="logo-title ms-2" style="font-size: 20px;">Crackers</h4>
         </a>
         <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
             <i class="icon">
@@ -20,6 +21,7 @@ $active = basename($_SERVER['PHP_SELF']); //get active page from url
             </i>
         </div>
     </div>
+
     <div class="sidebar-body pt-0 data-scrollbar">
         <div class="sidebar-list">
             <!-- Sidebar Menu Start -->
