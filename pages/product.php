@@ -1,12 +1,12 @@
 <?php
-include('session.php');
+include('../utilities/session.php');
 
 // Fetch data from the database
-$query = "SELECT * FROM tbl_product WHERE status>='1' GROUP BY CAST(SUBSTRING_INDEX(alignment, ' ', 1) AS UNSIGNED), SUBSTRING(alignment, LOCATE(' ', alignment) + 1) ASC";
+$query = "SELECT * FROM tbl_product WHERE status >= 1 GROUP BY CAST(SUBSTRING_INDEX(alignment, ' ', 1) AS UNSIGNED), SUBSTRING(alignment, LOCATE(' ', alignment) + 1) ASC";
 $result = mysqli_query($conn, $query);
 $productlist = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-$query2 = "SELECT * FROM tbl_section WHERE status = 1 ORDER BY id asc";
+$query2 = "SELECT * FROM tbl_section WHERE status = 1 ORDER BY id ASC";
 $result2 = mysqli_query($conn, $query2);
 $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
 
@@ -15,23 +15,23 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
 <html lang="en" dir="ltr">
 
 <!-- head Start -->
-<?php include('head.php'); ?>
+<?php include('../utilities/head.php'); ?>
 <!-- head END -->
 
 <body>
     <!-- loader Start -->
-    <?php include('loader.php') ?>
+    <?php include('../utilities/loader.php') ?>
     <!-- loader End -->
 
     <!-- sidenav Start -->
-    <?php include('side_nav.php') ?>
+    <?php include('../utilities/side_nav.php') ?>
     <!-- sidenav End -->
 
     <!-- Main Content Start -->
     <main class="main-content">
         <div class="position-relative iq-banner">
             <!--topnav Start-->
-            <?php include('top_nav.php') ?>
+            <?php include('../utilities/top_nav.php') ?>
             <!--topnav End-->
 
             <!-- Header Start -->
@@ -97,7 +97,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                                                 </a>
                                             </th>
                                             <th class="text-center">S.No</th>
-                                            <th class="text-center">Product Image</th>
+                                            <!-- <th class="text-center">Product Image</th> -->
                                             <th class="text-center">Product Name</th>
                                             <th class="text-center">Tamil Name</th>
                                             <th class="text-center">Category Name</th>
@@ -107,7 +107,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                                             <th class="text-center">Video URL</th>
                                             <th class="text-center">Availability</th>
                                             <th class="text-center">Alignment</th>
-                                            <th class="text-center">Section</th>
+                                            <!-- <th class="text-center">Section</th> -->
                                             <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
@@ -116,12 +116,12 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                                         $serialNumber = 1;
                                         foreach ($productlist as $data) {
                                             $id = $data['id'];
-                                            $imageUrl = ($data["image"] == '') ? "../assets/images/logo.png" : "uploads/{$data['image']}";
+                                            $imageUrl = ($data["image"] == '') ? "$admin_url/assets/images/logo.png" : "$admin_url/uploads/{$data['image']}";
                                         ?>
                                             <tr>
                                                 <td><input type="checkbox" name="checkbox" class="checkbox" value=<?= $id ?> /></td>
                                                 <td><?= $serialNumber++ ?></td>
-                                                <td><img src="<?= $imageUrl ?>" alt='Product Image' style='max-width: 50px; max-height: 50px;'></td>
+                                                <!-- <td><img src="<?= $imageUrl ?>" alt='Product Image' style='max-width: 50px; max-height: 50px;'></td> -->
                                                 <td><?= $data['name'] ?></td>
                                                 <td><?= $data['tamil_name'] ?></td>
                                                 <td><?= $data['category'] ?></td>
@@ -130,14 +130,14 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                                                 <td><?= $data['type'] ?></td>
                                                 <td style="white-space: break-spaces;"><?= $data['url'] ?></td>
                                                 <td>
-                                                    <input type="checkbox" name="switch_<?= $id ?>" id="switch_<?= $id ?>" class="togglebox" <?= $data['status'] == '1' ? 'checked' : ''; ?> oninput="availability(<?= $id ?>)" />
-                                                    <label for="switch_<?= $id ?>" class="toggle pt-1 text-white">Yes&nbsp;&nbsp;No</label>
+                                                    <input type="checkbox" name="switch_<?= $id ?>" id="switch_<?= $id ?>" class="togglebox" <?= $data['status'] == 1 ? 'checked' : ''; ?> oninput="availability(<?= $id ?>)" />
+                                                    <label for="switch_<?= $id ?>" style="padding-top: 5px;" class="toggle text-white"><b>Yes&nbsp;&nbsp;No</b></label>
                                                 </td>
                                                 <td>
                                                     <?= $data['alignment'] ?>
                                                     <input type="hidden" value="<?= $data['alignment'] ?>" class="alignment" />
                                                 </td>
-                                                <td>
+                                                <!-- <td>
                                                     <select class='section_<?= $id ?> p-1 text-white rounded-3' onchange="sectionchg(<?= $id ?>)"
                                                         <?php
                                                         $bgColor = ($data['section'] == 'none') ? '#dc3545' : '#198754';
@@ -153,8 +153,13 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                                                         }
                                                         ?>
                                                     </select>
-                                                </td>
+                                                </td> -->
                                                 <td>
+                                                    <a class='btn btn-sm btn-icon btn-info' onclick="editImages(<?= $id ?>)" data-bs-toggle='tooltip' title='Images' data-bs-placement='top'>
+                                                        <svg class='icon-20' width='20' fill='#fff' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                                            <path d="M0 96C0 60.7 28.7 32 64 32l384 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM323.8 202.5c-4.5-6.6-11.9-10.5-19.8-10.5s-15.4 3.9-19.8 10.5l-87 127.6L170.7 297c-4.6-5.7-11.5-9-18.7-9s-14.2 3.3-18.7 9l-64 80c-5.8 7.2-6.9 17.1-2.9 25.4s12.4 13.6 21.6 13.6l96 0 32 0 208 0c8.9 0 17.1-4.9 21.2-12.8s3.6-17.4-1.4-24.7l-120-176zM112 192a48 48 0 1 0 0-96 48 48 0 1 0 0 96z" stroke='currentColor' />
+                                                        </svg>
+                                                    </a>
                                                     <a class='btn btn-sm btn-icon btn-warning' onclick="editItem(<?= $id ?>)" data-bs-toggle='tooltip' title='Edit' data-bs-placement='top'>
                                                         <svg class='icon-20' width='20' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
                                                             <path d='M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'></path>
@@ -185,7 +190,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
         <!-- Hero Section End -->
 
         <!-- Footer Section Start -->
-        <?php include('footer.php') ?>
+        <?php include('../utilities/footer.php') ?>
         <!-- Footer Section End -->
     </main>
     <!-- Main Content End -->
@@ -203,9 +208,9 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                         </div>
                     </div>
                 </div>
-                <input type="submit" class="btn btn-success w-100" value="Import" />
+                <input type="submit" class="btn btn-success w-100" value="Import" readonly />
             </form>
-            <input id="importclosePopup" type='button' class="close btn btn-danger w-100 mt-3" value="Close">
+            <input id="importclosePopup" type='button' class="close btn btn-danger w-100 mt-3" value="Close" readonly />
         </div>
     </div>
     <!-- import - popup end-->
@@ -269,29 +274,29 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                     </div>
                     <div class="col-6">
                         <div class="form-group">
-                            <label class="form-label" for="vurl">Video URL</label>
-                            <input type="text" class="form-control" name="vurl" id="vurl">
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-group">
                             <label class="form-label" for="alignment">Alignment</label>
                             <input type="text" class="form-control" name="alignment" id="alignment" oninput="alignValitate()" required>
                         </div>
                     </div>
                     <div class="col-12 col-sm-6">
                         <div class="form-group">
-                            <label class="form-label" for="image">Image</label>
-                            <input type="file" class="form-control" name="image" id="image" accept="image/*" onchange="imagePreview('imagePreview')">
+                            <label class="form-label" for="vurl">Video URL</label>
+                            <input type="text" class="form-control" name="vurl" id="vurl">
                         </div>
                     </div>
-                    <div class="col-12 col-md-6">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="form-label" for="images">Images</label>
+                            <input type="file" class="form-control" name="image[]" id="images" accept="image/*" multiple onchange="imagePreview('imagePreview')">
+                        </div>
+                    </div>
+                    <div class="col-12">
                         <div id="imagePreview"></div>
                     </div>
                 </div>
-                <input type="submit" class="btn btn-success w-100" name="addData" value="Add" />
+                <input type="submit" class="btn btn-success w-100 mt-2" name="addData" value="Add" readonly />
             </form>
-            <input id="closePopup" type='button' class="close btn btn-danger w-100 mt-3" value="Close">
+            <input id="closePopup" type='button' class="close btn btn-danger w-100 mt-3" value="Close" readonly />
         </div>
     </div>
     <!-- Add - popup end-->
@@ -365,7 +370,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                             <input type="text" class="form-control" name="edit_alignment" id="edit_alignment" oninput="alignValitate()" required>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-6">
+                    <!-- <div class="col-12 col-sm-6">
                         <div class="form-group">
                             <label class="form-label" for="edit_image">Image</label>
                             <input type="file" class="form-control" name="edit_image" id="edit_image" accept="image/*" onchange="imagePreview('editimagePreview')">
@@ -373,26 +378,55 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                     </div>
                     <div class="col-12 col-md-6">
                         <div id="editimagePreview"></div>
-                    </div>
+                    </div> -->
                 </div>
                 <input type="hidden" name="edit_id" id="edit_id">
-                <input type="submit" class="btn btn-success w-100" value="Update" />
+                <input type="submit" class="btn btn-success w-100" value="Update" readonly />
             </form>
-            <input id="editclosePopup" class="btn btn-danger w-100 mt-3" value="Close">
+            <input id="editclosePopup" class="btn btn-danger w-100 mt-3" value="Close" readonly />
         </div>
     </div>
     <!-- Edit - popup end-->
 
+    <!-- Edit Images - popup start-->
+    <div id="editImages" class="modal">
+        <div class="modal-content">
+            <h4 class="text-center mb-2">Edit Images</h4>
+            <form id='editImgDetails'>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <div id="allimagePreview"></div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="form-label" for="edit_images">Images</label>
+                            <input type="file" class="form-control" name="edit_image[]" id="edit_images" accept="image/*" multiple onchange="imagePreview('editimagePreview')">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div id="editimagePreview"></div>
+                    </div>
+                </div>
+                <input type="hidden" name="prd_edit_id" id="prd_edit_id">
+                <input type="submit" class="btn btn-success w-100" value="Update" readonly />
+            </form>
+            <input id="closeModal" class="btn btn-danger w-100 mt-3" value="Close" readonly />
+        </div>
+    </div>
+    <!-- Edit Images - popup end-->
+
     <!-- script - start -->
-    <?php include('script.php') ?>
+    <?php include('../utilities/script.php') ?>
     <!-- script - end -->
 
     <script>
         $('#overlay').hide();
         $('#editoverlay').hide();
+        $("#editImages").hide();
         $('#importoverlay').hide();
         let alignArr = [];
         let delal;
+        const product_list = <?= json_encode($productlist) ?>;
 
         // store alignment - start
         const store = () => {
@@ -439,10 +473,14 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
         // previewImage
         const imagePreview = (previewId) => {
             $("#" + previewId).empty(); // Clear previous previews
-            const file = event.target.files[0];
-            let reader = new FileReader();
-            reader.onload = (e) => $("#" + previewId).append(`<img src="${e.target.result}" style="max-width: 100%; max-height: 200px; margin: 5px;">`);
-            reader.readAsDataURL(file);
+            const files = event.target.files;
+
+            for (let i = 0; i < files.length; i++) {
+                let file = files[i];
+                let reader = new FileReader();
+                reader.onload = (e) => $(`#${previewId}`).append(`<img src="${e.target.result}" style="max-width: 100px; max-height: 200px; margin: 5px;">`);
+                reader.readAsDataURL(file);
+            }
         };
 
         // validations start
@@ -456,7 +494,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
         const delDatas = (id) => {
             $.ajax({
                 type: 'POST',
-                url: 'backend/product.php',
+                url: '<?= $admin_url ?>/backend/product/',
                 data: {
                     req_type: 'delete',
                     id: id
@@ -547,7 +585,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                 if (result.isConfirmed) {
                     $.ajax({
                         type: 'POST',
-                        url: 'backend/product.php',
+                        url: '<?= $admin_url ?>/backend/product/',
                         data: {
                             req_type: 'delete',
                             id: id
@@ -582,48 +620,146 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
         };
         // delete item end
 
-        // fetch - start
-        const editItem = (id) => {
-            $.ajax({
-                type: 'POST',
-                url: 'backend/product.php',
-                data: {
-                    req_type: 'fetch',
-                    id: id
-                },
-                success: (res) => {
-                    var result = JSON.parse(res);
-                    if (result.status) {
-                        $('#edit_id').val(result.data.id);
-                        $('#edit_category').val(result.data.category);
-                        $('#edit_name').val(result.data.name);
-                        $('#edit_tamil_name').val(result.data.tamil_name);
-                        $('#edit_mrp').val(result.data.mrp);
-                        $('#edit_selling_price').val(result.data.selling_price);
-                        $('#edit_type').val(result.data.type);
-                        $('#edit_vurl').val(result.data.url);
-                        $('#edit_alignment').val(result.data.alignment);
-                        delal = result.data.alignment;
-                        $('#editimagePreview').empty();
-                        if (result.data.image) {
-                            $('#editimagePreview').append(`<img src="uploads/${result.data.image}" style="max-width: 100%; max-height: 200px; margin: 5px;">`);
+        // edit images - start
+        const editImages = (id) => {
+            const product = product_list.find(item => item.id == id);
+            $("#prd_edit_id").val(id);
+            $("#allimagePreview").empty();
+
+            // Check if images exist and are valid
+            if (!product.images || product.images === "" || product.images === "[]") {
+                $("#editImages").show();
+                return;
+            }
+
+            let images;
+            try {
+                images = JSON.parse(product.images);
+                if (!Array.isArray(images) || images.length === 0) {
+                    $("#editImages").show();
+                    return;
+                }
+            } catch (error) {
+                console.error("Invalid image JSON:", error);
+                $("#editImages").show();
+                return;
+            }
+
+            // Store in a global variable or hidden field if needed
+            window.currentImages = [...images]; // Copy to manipulate
+
+            images.forEach((image, index) => {
+                const imageId = `img-${index}`;
+                $("#allimagePreview").append(`
+                    <div id="${imageId}" style="position: relative; display: inline-block; margin: 5px;">
+                        <img src="<?= $admin_url ?>/uploads/${image}" style="max-width: 100px; max-height: 200px;">
+                        <span onclick="deleteImage(${index})" style="
+                            position: absolute;
+                            top: -8px;
+                            right: -8px;
+                            background: red;
+                            color: white;
+                            border: 1px solid #fff;
+                            border-radius: 50%;
+                            width: 20px;
+                            height: 20px;
+                            text-align: center;
+                            line-height: 17px;
+                            padding-left: 1px;
+                            cursor: pointer;
+                            font-weight: bold;
+                            font-size: 14px;
+                        ">×</span>
+                    </div>
+                `);
+            });
+            $("#editImages").show();
+        };
+
+        const deleteImage = (index) => {
+            let img_name = window.currentImages[index];
+            const updatedArray = window.currentImages.filter(item => item !== img_name);
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Do you want to delete this image?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: '<?= $admin_url ?>/backend/product/',
+                        data: {
+                            'id': $("#prd_edit_id").val(),
+                            'img_name': img_name,
+                            'images': JSON.stringify(updatedArray),
+                            'req_type': 'deletImg',
+                        },
+                        success: (response) => {
+                            if (response.trim() === "Success") {
+                                if (window.currentImages && window.currentImages.length > index) {
+                                    window.currentImages.splice(index, 1); // Remove image from array
+                                }
+                                $(`#img-${index}`).remove();
+
+                                Swal.fire({
+                                    title: "Image Deleted Successfully",
+                                    icon: 'success',
+                                    timer: 500, // 0.5 seconds
+                                    showConfirmButton: false
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: response.trim(),
+                                    icon: "error",
+                                    customClass: {
+                                        confirmButton: 'my-swal-confirm-button',
+                                    },
+                                });
+                            }
+                        },
+                        error: (error) => {
+                            console.log(error);
                         }
-                        // open editpopup                      
-                        $('#editoverlay').show();
-                    } else {
-                        Swal.fire({
-                            title: res.trim(),
-                            icon: 'error',
-                            customClass: {
-                                confirmButton: 'my-swal-confirm-button',
-                            },
-                        });
-                    }
-                },
-                error: (error) => {
-                    console.log(error);
+                    });
                 }
             });
+        };
+        // edit images - end
+
+        // fetch - start
+        const editItem = (id) => {
+            const result = product_list.find(item => item.id == id);
+            if (result) {
+                $('#edit_id').val(result.id);
+                $('#edit_category').val(result.category);
+                $('#edit_name').val(result.name);
+                $('#edit_tamil_name').val(result.tamil_name);
+                $('#edit_mrp').val(result.mrp);
+                $('#edit_selling_price').val(result.selling_price);
+                $('#edit_type').val(result.type);
+                $('#edit_vurl').val(result.url);
+                $('#edit_alignment').val(result.alignment);
+                delal = result.alignment;
+                $('#editimagePreview').empty();
+                if (result.image) {
+                    $('#editimagePreview').append(`<img src="uploads/${result.image}" style="max-width: 100%; max-height: 200px; margin: 5px;">`);
+                }
+                // open editpopup                      
+                $('#editoverlay').show();
+            } else {
+                Swal.fire({
+                    title: "No Product Found",
+                    icon: 'error',
+                    customClass: {
+                        confirmButton: 'my-swal-confirm-button',
+                    },
+                });
+            }
         };
         // fetch - end
 
@@ -632,7 +768,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
             const status = (event.target.checked) ? 1 : 2;
             $.ajax({
                 type: 'POST',
-                url: 'backend/product.php',
+                url: '<?= $admin_url ?>/backend/product/',
                 data: {
                     req_type: 'change',
                     status: status,
@@ -665,35 +801,35 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
         // product availability - end
 
         // section change - start
-        const sectionchg = (id) => {
-            $.ajax({
-                type: "POST",
-                url: 'backend/product.php',
-                data: {
-                    'section': $(".section_" + id).val(),
-                    'id': id,
-                    'req_type': 'section',
-                },
-                success: (response) => {
-                    if (response.trim() === "success") {
-                        Swal.fire({
-                            title: "Section Updated successfully",
-                            icon: "success",
-                            customClass: {
-                                confirmButton: 'my-swal-confirm-button',
-                            },
-                        }).then(() => {
-                            location.reload();
-                        });
-                    } else {
-                        console.log(response.trim());
-                    }
-                },
-                error: (error) => {
-                    console.log(error);
-                }
-            });
-        };
+        // const sectionchg = (id) => {
+        //     $.ajax({
+        //         type: "POST",
+        //         url: '<?= $admin_url ?>/backend/product/',
+        //         data: {
+        //             'section': $(".section_" + id).val(),
+        //             'id': id,
+        //             'req_type': 'section',
+        //         },
+        //         success: (response) => {
+        //             if (response.trim() === "Success") {
+        //                 Swal.fire({
+        //                     title: "Section Updated successfully",
+        //                     icon: "success",
+        //                     customClass: {
+        //                         confirmButton: 'my-swal-confirm-button',
+        //                     },
+        //                 }).then(() => {
+        //                     location.reload();
+        //                 });
+        //             } else {
+        //                 console.log(response.trim());
+        //             }
+        //         },
+        //         error: (error) => {
+        //             console.log(error);
+        //         }
+        //     });
+        // };
         //section change -end
 
         $(document).ready(function() {
@@ -713,7 +849,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                 $("#imagePreview").empty();
             });
 
-            // close editpopup
+            // close edit popup
             $('#editclosePopup').click(() => {
                 alignArr.push(delal);
                 $('#editoverlay').hide();
@@ -721,11 +857,20 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                 $("#editimagePreview").empty();
             });
 
-            // close importpopup
+            // close import popup
             $('#importclosePopup').click(() => {
                 $('#importoverlay').hide();
                 $('#importData')[0].reset();
             });
+
+            // close images popup
+            $('#closeModal').click(() => {
+                $('.modal').hide();
+                $('#editImgDetails')[0].reset();
+                $("#editimagePreview").empty();
+                location.reload();
+            });
+
 
             // add item - start
             $('#addDetails').submit(function(e) {
@@ -767,7 +912,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                     });
                     return;
                 } else {
-                    const formData = new FormData();
+                    const formData = new FormData($(this)[0]);
                     formData.append("category", $("#category").val().trim());
                     formData.append("name", $("#name").val().trim());
                     formData.append("tamil_name", $("#tamil_name").val().trim());
@@ -776,11 +921,10 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                     formData.append("alignment", alignment);
                     formData.append("mrp", $("#mrp").val());
                     formData.append("selling_price", $("#selling_price").val());
-                    formData.append("image", $('#image')[0].files[0]);
                     formData.append("req_type", "add");
                     $.ajax({
                         type: 'POST',
-                        url: 'backend/product.php',
+                        url: '<?= $admin_url ?>/backend/product/',
                         data: formData,
                         contentType: false,
                         processData: false,
@@ -870,7 +1014,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                     formData.append("req_type", "edit");
                     $.ajax({
                         type: 'POST',
-                        url: 'backend/product.php',
+                        url: '<?= $admin_url ?>/backend/product/',
                         data: formData,
                         contentType: false,
                         processData: false,
@@ -932,7 +1076,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                 formData.append("req_type", "import");
                 $.ajax({
                     type: 'POST',
-                    url: 'backend/product.php',
+                    url: '<?= $admin_url ?>/backend/product/',
                     data: formData,
                     contentType: false,
                     processData: false,
