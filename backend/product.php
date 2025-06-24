@@ -24,17 +24,19 @@ function Add()
     extract($_REQUEST);
     global $conn;
 
+    // store uploaded file in array
+    $uploaded_files = [];
+
     // Check the image
-    if (!empty($_FILES['images'])) {
-        // store uploaded file in array
-        $uploaded_files = array();
+    if (isset($_FILES['images']) && is_array($_FILES['images']['name'])) {
 
         // Choose a directory to store the uploaded images
-        $upload_directory = '../uploads';
+        // $upload_directory = __DIR__ ."/../uploads";
+        $upload_directory = realpath(__DIR__ . "/../uploads");
 
         // Check if the directory already exists
-        if (!file_exists($upload_directory)) {
-
+        if (!is_dir($upload_directory)) {
+            
             // Create the directory
             if (!mkdir($upload_directory, 0777, true)) {
                 echo "Sorry! Failed to create directory.";
@@ -42,99 +44,113 @@ function Add()
             }
         }
 
-        // Loop through each uploaded file
-        foreach ($_FILES['images']['tmp_name'] as $key => $image_tmp_name) {
-            $image = $_FILES['images']['name'][$key];
-            $size = $_FILES['images']['size'][$key];
-            $imageFileType = strtolower(pathinfo($image, PATHINFO_EXTENSION));
+        // store all images in loop
+        foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
             $image_name = uniqid() . '.webp';
-
-            // Move the uploaded image to the chosen directory
             $target_path = $upload_directory . '/' . $image_name;
 
-            // Create an image resource from the uploaded file
-            switch ($imageFileType) {
-
-                case 'jpg':
-                case 'jpeg':
-                    $image = imagecreatefromjpeg($image_tmp_name);
-                    break;
-                case 'png':
-                    $image = imagecreatefrompng($image_tmp_name);
-                    break;
-                case 'gif':
-                    $image = imagecreatefromgif($image_tmp_name);
-                    break;
-                case 'webp':
-                    $image = imagecreatefromwebp($image_tmp_name);
-                    break;
-                default:
-                    echo "Sorry! only JPG, JPEG, PNG, WEBP & GIF files are allowed.";
-                    exit;
-            }
-
-            if (!$image) {
-                echo "Sorry! Failed to read image.";
+            if ($_FILES['images']['size'][$key] > (3 * 1024 * 1024)) {
+                echo "One or more files exceed the 3MB.";
                 exit;
             }
 
-            if ($size > (3 * 1024 * 1024)) { // Check file size 3mb
-                echo "Sorry! File should not be large than 3mb.";
-                return;
-            } else if (imagewebp($image, $target_path)) {
-                imagedestroy($image);
+            if (move_uploaded_file($tmp_name, $target_path)) {
                 $uploaded_files[] = $image_name;
             } else {
-                echo "Sorry! Error in Uploading this file.";
-                return;
+                echo "Failed to upload";
+                exit;
             }
         }
         $uploaded_files = json_encode($uploaded_files);
+    }
 
-        $query2 = "INSERT INTO tbl_product (category, name, tamil_name, images, mrp, selling_price, type, url, alignment) VALUES ('$category', '$name', '$tamil_name', '$uploaded_files', '$mrp', '$selling_price', '$type', '$vurl', '$alignment')";
-        $result2 = mysqli_query($conn, $query2);
-        if ($result2) {
-            echo 'Success';
-        } else {
-            echo 'Error in Uploading Product!';
-        }
-
-
-
-        // $image_tmp_name = $_FILES['image']['tmp_name'];
-        // $image_name = uniqid() . '.' . pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-        // $imageFileType = strtolower(pathinfo($image_name, PATHINFO_EXTENSION));
-
-        // // Choose a directory to store the uploaded images
-        // $upload_directory = '../uploads/';
-        // // Move the uploaded image to the chosen directory
-        // $target_path = $upload_directory . $image_name;
-
-        // if (!getimagesize($image_tmp_name)) {   // Check if image file is a actual image
-        //     echo "Sorry! File is not an image.";
-        //     return;
-        // } else if ($_FILES["image"]["size"] > (2 * 1024 * 1024)) { // Check file size max - 2mb
-        //     echo "Sorry! File is too large.";
-        //     return;
-        // } else if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {  // Allow certain file formats
-        //     echo "Sorry! only JPG, JPEG, PNG & GIF files are allowed.";
-        //     return;
-        // } else {
-        //     if (move_uploaded_file($image_tmp_name, $target_path)) {
-        //         $query2 = "INSERT INTO tbl_product (category, name, tamil_name, image, mrp, selling_price, type, url, alignment) VALUES ('$category', '$name', '$tamil_name', '$image_name', '$mrp', '$selling_price', '$type', '$vurl', '$alignment')";
-        //         $result2 = mysqli_query($conn, $query2);
-        //         if ($result2) {
-        //             echo 'Success';
-        //         } else {
-        //             echo 'Error in Uploading Product!';
-        //         }
-        //     } else {
-        //         echo "Sorry, there was an error in uploading this file.";
-        //     }
-        // }
+    $query2 = "INSERT INTO tbl_product (category, name, tamil_name, images, mrp, selling_price, type, url, alignment) VALUES ('$category', '$name', '$tamil_name', '$uploaded_files', '$mrp', '$selling_price', '$type', '$vurl', '$alignment')";
+    $result2 = mysqli_query($conn, $query2);
+    if ($result2) {
+        echo 'Success';
     } else {
-        echo "Sorry! File not found.";
-    };
+        echo 'Error in Adding Product!';
+    }
+
+    // if (!empty($_FILES['images'])) {
+    //     // store uploaded file in array
+    //     $uploaded_files = [];
+
+    //     // Choose a directory to store the uploaded images
+    //     $upload_directory = '../uploads';
+
+    //     // Check if the directory already exists
+    //     if (!is_dir($upload_directory)) {
+
+    //         // Create the directory
+    //         if (!mkdir($upload_directory, 0777, true)) {
+    //             echo "Sorry! Failed to create directory.";
+    //             exit();
+    //         }
+    //     }
+
+    //     // Loop through each uploaded file
+    //     foreach ($_FILES['images']['tmp_name'] as $key => $image_tmp_name) {
+    //         $image = $_FILES['images']['name'][$key];
+    //         $size = $_FILES['images']['size'][$key];
+    //         $imageFileType = strtolower(pathinfo($image, PATHINFO_EXTENSION));
+    //         $image_name = uniqid() . '.webp';
+
+    //         // Move the uploaded image to the chosen directory
+    //         $target_path = $upload_directory . '/' . $image_name;
+
+    //         if ($size > (3 * 1024 * 1024)) { // Check file size 3mb
+    //             echo "Sorry! File should be less than 3mb.";
+    //             return;
+    //         }
+
+    //         // Create an image resource from the uploaded file
+    //         switch ($imageFileType) {
+
+    //             case 'jpg':
+    //             case 'jpeg':
+    //                 $image = @imagecreatefromjpeg($image_tmp_name);
+    //                 break;
+    //             case 'png':
+    //                 $image = @imagecreatefrompng($image_tmp_name);
+    //                 break;
+    //             case 'gif':
+    //                 $image = @imagecreatefromgif($image_tmp_name);
+    //                 break;
+    //             case 'webp':
+    //                 $image = @imagecreatefromwebp($image_tmp_name);
+    //                 break;
+    //             default:
+    //                 echo "Sorry! only JPG, JPEG, PNG, WEBP & GIF files are allowed.";
+    //                 exit;
+    //         }
+
+    //         if (!$image) {
+    //             echo "Sorry! Failed to read image.";
+    //             exit;
+    //         }
+
+    //         if (!imagewebp($image, $target_path, 75)) {
+    //             imagedestroy($image);
+    //             echo "Sorry! Error in Uploading this file.";
+    //             exit;
+    //         }
+
+    //         imagedestroy($image);
+    //         $uploaded_files[] = $image_name;
+    //     }
+    //     $uploaded_files = json_encode($uploaded_files);
+
+    //     $query2 = "INSERT INTO tbl_product (category, name, tamil_name, images, mrp, selling_price, type, url, alignment) VALUES ('$category', '$name', '$tamil_name', '$uploaded_files', '$mrp', '$selling_price', '$type', '$vurl', '$alignment')";
+    //     $result2 = mysqli_query($conn, $query2);
+    //     if ($result2) {
+    //         echo 'Success';
+    //     } else {
+    //         echo 'Error in Uploading Product!';
+    //     }
+    // } else {
+    //     echo "Sorry! File not found.";
+    // };
 }
 
 

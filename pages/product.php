@@ -428,6 +428,22 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
         let delal;
         const product_list = <?= json_encode($productlist) ?>;
 
+        // generate unique file name
+        const generateUniqueFilename = () => {
+            return 'img_' + Date.now().toString(36) + Math.random().toString(36).substring(2, 8) + '.webp';
+        };
+
+        // image compression
+        const compressImage = (file) => {
+            const options = {
+                maxSizeMB: 1,
+                maxWidthOrHeight: 1024,
+                useWebWorker: true,
+                fileType: 'image/webp'
+            };
+            return imageCompression(file, options);
+        };
+
         // store alignment - start
         const store = () => {
             $(".alignment").each((index, element) => {
@@ -709,7 +725,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                                 Swal.fire({
                                     title: "Image Deleted Successfully",
                                     icon: 'success',
-                                    timer: 500, // 0.5 seconds
+                                    timer: 1000, // 1seconds
                                     showConfirmButton: false
                                 });
                             } else {
@@ -871,6 +887,42 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                 location.reload();
             });
 
+            // ajax call
+            const sendFormData = (formData) => {
+                $.ajax({
+                    type: 'POST',
+                    url: '<?= $admin_url ?>/backend/product/',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: (res) => {
+                        if (res.trim() == "Success") {
+                            Swal.fire({
+                                title: 'Details Uploaded Successfully!',
+                                icon: 'success',
+                                customClass: {
+                                    confirmButton: 'my-swal-confirm-button',
+                                },
+                            }).then((response) => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: res.trim(),
+                                icon: 'error',
+                                customClass: {
+                                    confirmButton: 'my-swal-confirm-button',
+                                },
+                            }).then(() => {
+                                $("#addDetails [type='submit']").prop('disabled', false).val("Add");
+                            });
+                        }
+                    },
+                    error: (error) => {
+                        console.log(error);
+                    }
+                });
+            };
 
             // add item - start
             $('#addDetails').submit(function(e) {
@@ -878,6 +930,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                 e.preventDefault();
                 let alignment = $("#alignment").val().trim();
                 const aCheck = alignCheck(alignment);
+                const files = $('#images')[0].files;
                 if (aCheck) {
                     Swal.fire({
                         title: 'Alignment Already Exists!',
@@ -912,7 +965,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                     });
                     return;
                 } else {
-                    const formData = new FormData($(this)[0]);
+                    const formData = new FormData();
                     formData.append("category", $("#category").val().trim());
                     formData.append("name", $("#name").val().trim());
                     formData.append("tamil_name", $("#tamil_name").val().trim());
@@ -922,39 +975,56 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                     formData.append("mrp", $("#mrp").val());
                     formData.append("selling_price", $("#selling_price").val());
                     formData.append("req_type", "add");
-                    $.ajax({
-                        type: 'POST',
-                        url: '<?= $admin_url ?>/backend/product/',
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: (res) => {
-                            if (res.trim() == "Success") {
-                                Swal.fire({
-                                    title: 'Details Uploaded Successfully!',
-                                    icon: 'success',
-                                    customClass: {
-                                        confirmButton: 'my-swal-confirm-button',
-                                    },
-                                }).then((response) => {
-                                    location.reload();
-                                });
-                            } else {
-                                Swal.fire({
-                                    title: res.trim(),
-                                    icon: 'error',
-                                    customClass: {
-                                        confirmButton: 'my-swal-confirm-button',
-                                    },
-                                }).then(() => {
-                                    $("#addDetails [type='submit']").prop('disabled', false).val("Add");
-                                });
-                            }
-                        },
-                        error: (error) => {
-                            console.log(error);
-                        }
+
+                    if (files.length === 0) {
+                        formData.append('images[]', '');
+                        sendFormData(formData);
+                        return;
+                    }
+
+                    const compressPromises = $.map(files, function(file, index) {
+                        return compressImage(file).then(function(compressed) {
+                            formData.append('images[]', compressed, `image_${index}.webp`);
+                        });
                     });
+
+                    Promise.all(compressPromises).then(function() {
+                        sendFormData(formData);
+                    });
+
+                    // $.ajax({
+                    //     type: 'POST',
+                    //     url: '<?= $admin_url ?>/backend/product/',
+                    //     data: formData,
+                    //     contentType: false,
+                    //     processData: false,
+                    //     success: (res) => {
+                    //         if (res.trim() == "Success") {
+                    //             Swal.fire({
+                    //                 title: 'Details Uploaded Successfully!',
+                    //                 icon: 'success',
+                    //                 customClass: {
+                    //                     confirmButton: 'my-swal-confirm-button',
+                    //                 },
+                    //             }).then((response) => {
+                    //                 location.reload();
+                    //             });
+                    //         } else {
+                    //             Swal.fire({
+                    //                 title: res.trim(),
+                    //                 icon: 'error',
+                    //                 customClass: {
+                    //                     confirmButton: 'my-swal-confirm-button',
+                    //                 },
+                    //             }).then(() => {
+                    //                 $("#addDetails [type='submit']").prop('disabled', false).val("Add");
+                    //             });
+                    //         }
+                    //     },
+                    //     error: (error) => {
+                    //         console.log(error);
+                    //     }
+                    // });
                 }
             });
             // add item - end

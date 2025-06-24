@@ -35,6 +35,9 @@
     <!-- Chart js CDN link -->
     <script src="<?= $admin_url ?>/assets/js/charts/chart.min.js"></script>
 
+    <!-- Image Comprossion CDN link -->
+    <script src="<?= $admin_url ?>/assets/js/image-compression/browser-image-compression.js"></script>
+
 
     <script>
         let active = "<?= $active ?>";
