@@ -287,7 +287,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                     <div class="col-12">
                         <div class="form-group">
                             <label class="form-label" for="images">Images</label>
-                            <input type="file" class="form-control" name="image[]" id="images" accept="image/*" multiple onchange="imagePreview('imagePreview')">
+                            <input type="file" class="form-control" name="images[]" id="images" accept="image/*" multiple onchange="imagePreview('imagePreview')">
                         </div>
                     </div>
                     <div class="col-12">
@@ -400,7 +400,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                     <div class="col-12">
                         <div class="form-group">
                             <label class="form-label" for="edit_images">Images</label>
-                            <input type="file" class="form-control" name="edit_image[]" id="edit_images" accept="image/*" multiple onchange="imagePreview('editimagePreview')">
+                            <input type="file" class="form-control" name="edit_images[]" id="edit_images" accept="image/*" multiple onchange="imagePreview('editimagePreview')">
                         </div>
                     </div>
                     <div class="col-12">
