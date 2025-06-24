@@ -29,6 +29,19 @@ function Add()
         // store uploaded file in array
         $uploaded_files = array();
 
+        // Choose a directory to store the uploaded images
+        $upload_directory = '../uploads';
+
+        // Check if the directory already exists
+        if (!file_exists($upload_directory)) {
+
+            // Create the directory
+            if (!mkdir($upload_directory, 0777, true)) {
+                echo "Sorry! Failed to create directory.";
+                exit();
+            }
+        }
+
         // Loop through each uploaded file
         foreach ($_FILES['images']['tmp_name'] as $key => $image_tmp_name) {
             $image = $_FILES['images']['name'][$key];
@@ -36,21 +49,8 @@ function Add()
             $imageFileType = strtolower(pathinfo($image, PATHINFO_EXTENSION));
             $image_name = uniqid() . '.webp';
 
-            // Choose a directory to store the uploaded images
-            $upload_directory = '../uploads';
-
             // Move the uploaded image to the chosen directory
             $target_path = $upload_directory . '/' . $image_name;
-
-            // Check if the directory already exists
-            if (!file_exists($upload_directory)) {
-
-                // Create the directory
-                if (!mkdir($upload_directory, 0777, true)) {
-                    echo "Sorry! Failed to create directory.";
-                    exit();
-                }
-            }
 
             // Create an image resource from the uploaded file
             switch ($imageFileType) {
