@@ -5,7 +5,7 @@
         <title><?= $site_name ?> | Admin Panel</title>
         
         <!-- Favicon -->
-        <link rel="shortcut icon" href="<?= $admin_url ?>/assets/images/fav_icon.jpeg" />
+        <link rel="shortcut icon" href="<?= $admin_url ?>/assets/images/logo.png" />
         
         <!-- Library / Plugin Css Build -->
         <link rel="stylesheet" href="<?= $admin_url ?>/assets/css/core/libs.min.css" />
