@@ -705,6 +705,7 @@ $categorylist = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                 location.reload();
                             });
                         } else {
+                            Swal.close(); // Close the loader
                             Swal.fire({
                                 title: res.trim(),
                                 icon: 'error',

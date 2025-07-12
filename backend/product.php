@@ -1,24 +1,6 @@
 <?php
 include("../utilities/db.php");
 
-function Fetch()
-{
-    extract($_REQUEST);
-    global $conn;
-    // Query to fetch state details
-    $query1 = "SELECT * FROM tbl_product WHERE id = '$id'";
-    $result1 = mysqli_query($conn, $query1);
-
-    if ($result1) {
-        $data = mysqli_fetch_assoc($result1);
-        // Return state details in JSON format
-        echo json_encode(['status' => true, 'data' => $data]);
-    } else {
-        // Return an error message in JSON format
-        echo json_encode(['status' => false, 'error' => mysqli_error($conn)]);
-    }
-}
-
 function Add()
 {
     extract($_REQUEST);
@@ -31,12 +13,11 @@ function Add()
     if (isset($_FILES['images']) && is_array($_FILES['images']['name'])) {
 
         // Choose a directory to store the uploaded images
-        // $upload_directory = __DIR__ ."/../uploads";
         $upload_directory = realpath(__DIR__ . "/../uploads");
 
         // Check if the directory already exists
         if (!is_dir($upload_directory)) {
-            
+
             // Create the directory
             if (!mkdir($upload_directory, 0777, true)) {
                 echo "Sorry! Failed to create directory.";
@@ -71,96 +52,79 @@ function Add()
     } else {
         echo 'Error in Adding Product!';
     }
-
-    // if (!empty($_FILES['images'])) {
-    //     // store uploaded file in array
-    //     $uploaded_files = [];
-
-    //     // Choose a directory to store the uploaded images
-    //     $upload_directory = '../uploads';
-
-    //     // Check if the directory already exists
-    //     if (!is_dir($upload_directory)) {
-
-    //         // Create the directory
-    //         if (!mkdir($upload_directory, 0777, true)) {
-    //             echo "Sorry! Failed to create directory.";
-    //             exit();
-    //         }
-    //     }
-
-    //     // Loop through each uploaded file
-    //     foreach ($_FILES['images']['tmp_name'] as $key => $image_tmp_name) {
-    //         $image = $_FILES['images']['name'][$key];
-    //         $size = $_FILES['images']['size'][$key];
-    //         $imageFileType = strtolower(pathinfo($image, PATHINFO_EXTENSION));
-    //         $image_name = uniqid() . '.webp';
-
-    //         // Move the uploaded image to the chosen directory
-    //         $target_path = $upload_directory . '/' . $image_name;
-
-    //         if ($size > (3 * 1024 * 1024)) { // Check file size 3mb
-    //             echo "Sorry! File should be less than 3mb.";
-    //             return;
-    //         }
-
-    //         // Create an image resource from the uploaded file
-    //         switch ($imageFileType) {
-
-    //             case 'jpg':
-    //             case 'jpeg':
-    //                 $image = @imagecreatefromjpeg($image_tmp_name);
-    //                 break;
-    //             case 'png':
-    //                 $image = @imagecreatefrompng($image_tmp_name);
-    //                 break;
-    //             case 'gif':
-    //                 $image = @imagecreatefromgif($image_tmp_name);
-    //                 break;
-    //             case 'webp':
-    //                 $image = @imagecreatefromwebp($image_tmp_name);
-    //                 break;
-    //             default:
-    //                 echo "Sorry! only JPG, JPEG, PNG, WEBP & GIF files are allowed.";
-    //                 exit;
-    //         }
-
-    //         if (!$image) {
-    //             echo "Sorry! Failed to read image.";
-    //             exit;
-    //         }
-
-    //         if (!imagewebp($image, $target_path, 75)) {
-    //             imagedestroy($image);
-    //             echo "Sorry! Error in Uploading this file.";
-    //             exit;
-    //         }
-
-    //         imagedestroy($image);
-    //         $uploaded_files[] = $image_name;
-    //     }
-    //     $uploaded_files = json_encode($uploaded_files);
-
-    //     $query2 = "INSERT INTO tbl_product (category, name, tamil_name, images, mrp, selling_price, type, url, alignment) VALUES ('$category', '$name', '$tamil_name', '$uploaded_files', '$mrp', '$selling_price', '$type', '$vurl', '$alignment')";
-    //     $result2 = mysqli_query($conn, $query2);
-    //     if ($result2) {
-    //         echo 'Success';
-    //     } else {
-    //         echo 'Error in Uploading Product!';
-    //     }
-    // } else {
-    //     echo "Sorry! File not found.";
-    // };
 }
 
+function AddImages()
+{
+    extract($_REQUEST);
+    global $conn;
+
+    // store uploaded file in array
+    $uploaded_files = [];
+
+    // Check the image
+    if (isset($_FILES['images']) && is_array($_FILES['images']['name'])) {
+
+        // Choose a directory to store the uploaded images
+        $upload_directory = realpath(__DIR__ . "/../uploads");
+
+        // Check if the directory already exists
+        if (!is_dir($upload_directory)) {
+
+            // Create the directory
+            if (!mkdir($upload_directory, 0777, true)) {
+                echo "Sorry! Failed to create directory.";
+                exit();
+            }
+        }
+
+        // store all images in loop
+        foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
+            $image_name = uniqid() . '.webp';
+            $target_path = $upload_directory . '/' . $image_name;
+
+            if ($_FILES['images']['size'][$key] > (3 * 1024 * 1024)) {
+                echo "One or more files exceed the 3MB.";
+                exit;
+            }
+
+            if (move_uploaded_file($tmp_name, $target_path)) {
+                $uploaded_files[] = $image_name;
+            } else {
+                echo "Failed to upload";
+                exit;
+            }
+        }
+        
+        // Decode the JSON string to an array
+        $decoded_oldimages = json_decode($oldimages, true); // true gives associative array
+
+        if (is_array($decoded_oldimages)) {
+            $uploaded_files = array_merge($uploaded_files, $decoded_oldimages);
+        }
+
+        $uploaded_files = json_encode($uploaded_files);
+        $query2 = "UPDATE tbl_product SET images = '$uploaded_files' WHERE id = '$edit_id' ";
+        $result2 = mysqli_query($conn, $query2);
+        if ($result2) {
+            echo 'Success';
+        } else {
+            echo 'Error in Adding Product!';
+        }
+    } else {
+        echo 'No Files Found!';
+    }
+}
 
 function DeleteImg()
 {
     extract($_REQUEST);
     global $conn;
+
     // query
     $query3 = "UPDATE tbl_product SET images = '$images' WHERE id = '$id' ";
     if (mysqli_query($conn, $query3)) {
+
         // Delete the image file from server
         $imagePath = "../uploads/" . $img_name;
         if (file_exists($imagePath)) {
@@ -191,36 +155,7 @@ function Edit()
     extract($_REQUEST);
     global $conn;
 
-    // Check the image
-    if (isset($_FILES['edit_image'])) {
-        $editimage_tmp_name = $_FILES['edit_image']['tmp_name'];
-        $editimage_name = uniqid() . '.' . pathinfo($_FILES['edit_image']['name'], PATHINFO_EXTENSION);
-        $editimageFileType = strtolower(pathinfo($editimage_name, PATHINFO_EXTENSION));
-
-        // Choose a directory to store the uploaded images
-        $upload_directory = '../uploads/';
-        // Move the uploaded image to the chosen directory
-        $target_path = $upload_directory . $editimage_name;
-
-        if (!getimagesize($editimage_tmp_name)) {   // Check if image file is a actual image
-            echo "Sorry! File is not an image.";
-            return;
-        } else if ($_FILES["edit-image"]["size"] > (2 * 1024 * 1024)) { // Check file size max - 2mb
-            echo "Sorry! File is too large.";
-            return;
-        } else if ($editimageFileType != "jpg" && $editimageFileType != "png" && $editimageFileType != "jpeg" && $editimageFileType != "gif") {  // Allow certain file formats
-            echo "Sorry! only JPG, JPEG, PNG & GIF files are allowed.";
-            return;
-        } else {
-            if (move_uploaded_file($editimage_tmp_name, $target_path)) {
-                $query4 = "UPDATE tbl_product SET category='$edit_category', name='$edit_name', tamil_name='$edit_tamil_name', mrp='$edit_mrp', selling_price='$edit_selling_price', type='$edit_type', url='$edit_vurl', alignment='$edit_alignment', image ='$editimage_name' WHERE id = '$edit_id'";
-            } else {
-                echo "Sorry, there was an error in updating this data.";
-            }
-        }
-    } else {
-        $query4 = "UPDATE tbl_product SET category='$edit_category', name='$edit_name', tamil_name='$edit_tamil_name', mrp='$edit_mrp', selling_price='$edit_selling_price', type='$edit_type', url='$edit_vurl', alignment='$edit_alignment' WHERE id = '$edit_id'";
-    }
+    $query4 = "UPDATE tbl_product SET category='$edit_category', name='$edit_name', tamil_name='$edit_tamil_name', mrp='$edit_mrp', selling_price='$edit_selling_price', type='$edit_type', url='$edit_vurl', alignment='$edit_alignment' WHERE id = '$edit_id'";
     $result4 = mysqli_query($conn, $query4);
     if ($result4) {
         echo 'Success';
@@ -273,19 +208,6 @@ function Import()
         echo "File Not Found!";
     }
 }
-
-// function SectionChange()
-// {
-//     extract($_REQUEST);
-//     global $conn;
-//     // query
-//     $query12 = "UPDATE tbl_product SET section='$section' WHERE id='$id'";
-//     if (mysqli_query($conn, $query12)) {
-//         echo "success";
-//     } else {
-//         echo "Error Updating Section!";
-//     }
-// }
 
 // below are frontend (website) ajax calls
 
@@ -401,6 +323,10 @@ switch ($_REQUEST['req_type']) {
         DeleteImg();
         break;
 
+    case 'addImages':
+        AddImages();
+        break;
+
     case 'fetch':
         Fetch();
         break;
@@ -436,10 +362,6 @@ switch ($_REQUEST['req_type']) {
     case 'getPrd':
         GetPrd();
         break;
-
-    // case 'section':
-    //     SectionChange();
-    //     break;
 
     default:
         echo "No Action Found";

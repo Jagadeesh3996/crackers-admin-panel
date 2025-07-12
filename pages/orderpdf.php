@@ -10,7 +10,7 @@
     if (isset($_GET['oid'])) {
         $oid = $_GET['oid'];
     } else {
-        header("Location: orders.php");
+        header("Location: $admin_url/orders/");
         exit();
     }
 
@@ -102,10 +102,10 @@
                                     <td colspan="4" class="bline right">Email : <b>'.$site_email.'</b></td>
                                 </tr>
                                 <tr>
-                                    <td class="bline"></td>
-                                    <td colspan="6" class="bline"><center>
-                                        <h2><b>'.$site_name.'</b></h2>
-                                        <p>'.$site_address.'</p>
+                                    <td colspan="3" class="bline"><center><img height="100" src="' . $admin_url . '/assets/images/logo.png" alt="logo" ></center></td>
+                                    <td colspan="4" class="bline"><center>
+                                        <h2><b>' . $site_name . '</b></h2>
+                                        <p>' . $site_address . '</p>
                                     </center></td>
                                     <td class="bline"></td>
                                 </tr>
@@ -145,7 +145,7 @@
                                     $totalqty += $prod->prd_qty;
                                     $nettotal += $prod->prd_nettotal;
                                     $p_id = $prod->prd_id;
-                                    $q2 = "select * from tbl_product where id='$p_id' limit 1";
+                                    $q2 = "SELECT * FROM tbl_product WHERE id='$p_id' LIMIT 1";
                                     $res2 = mysqli_query($conn, $q2);
                                     $item = mysqli_fetch_array($res2);
                                     $html .= '<tr class="rbd">

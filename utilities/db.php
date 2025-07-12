@@ -26,13 +26,14 @@ $site_status = $data['website_status'];
 $site_data = json_decode($data['shop_details'], true);
 
 // for local
-// $domain = "localhost/kickvy/admin";
-// $admin_url = $protocol . '://' . $domain;
+// $domain = "localhost/kickvy";
+// $site_url = $protocol . '://' . $domain . '/site';
+// $admin_url = $protocol . '://' . $domain . '/admin';
 
 // for live
 $domain = $site_data['shop_url'];
+$site_url = $protocol . '://' . $domain . '/newsite';
 $admin_url = $protocol . '://newadmin.' . $domain;
-$site_url = $protocol . '://' . $domain;
 $site_name = $site_data['shop_name'];
 $site_code = $site_data['shop_code'];
 $billing_discount = $site_data['billing_discount'];

@@ -2,13 +2,16 @@
 include('../utilities/session.php');
 
 // Fetch data from the database
-$query = "SELECT * FROM tbl_product WHERE status >= 1 GROUP BY CAST(SUBSTRING_INDEX(alignment, ' ', 1) AS UNSIGNED), SUBSTRING(alignment, LOCATE(' ', alignment) + 1) ASC";
+$query = "SELECT a.* 
+            FROM tbl_product AS a 
+            LEFT JOIN tbl_category AS b ON b.name = a.category 
+            WHERE b.status = 1 
+            AND a.status >= 1 
+            GROUP BY 
+            CAST(SUBSTRING_INDEX(a.alignment, ' ', 1) AS UNSIGNED), 
+            SUBSTRING(a.alignment, LOCATE(' ', a.alignment) + 1)";
 $result = mysqli_query($conn, $query);
 $productlist = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-$query2 = "SELECT * FROM tbl_section WHERE status = 1 ORDER BY id ASC";
-$result2 = mysqli_query($conn, $query2);
-$sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
 
 ?>
 <!DOCTYPE html>
@@ -50,12 +53,12 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                                         </svg>
                                         Export
                                     </button>
-                                    <a href="<?= $site_url ?>/admin/dashboard/sample_download.php?file=product_list.csv" class="btn btn-success text-white mb-1">
+                                    <button class="btn btn-success text-white mb-1" id="sampleexportData">
                                         <svg width="15" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
                                             <path fill="#fff" d="M0 64C0 28.7 28.7 0 64 0L224 0l0 128c0 17.7 14.3 32 32 32l128 0 0 288c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 64zm384 64l-128 0L256 0 384 128z" />
                                         </svg>
                                         Sample
-                                    </a>
+                                    </button>
                                     <button class="btn btn-success text-white mb-1" id="importPopup">
                                         <svg width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                             <path fill="#fff" d="M128 64c0-35.3 28.7-64 64-64H352V128c0 17.7 14.3 32 32 32H512V448c0 35.3-28.7 64-64 64H192c-35.3 0-64-28.7-64-64V336H302.1l-39 39c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l80-80c9.4-9.4 9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l39 39H128V64zm0 224v48H24c-13.3 0-24-10.7-24-24s10.7-24 24-24H128zM512 128H384V0L512 128z" />
@@ -107,7 +110,6 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                                             <th class="text-center">Video URL</th>
                                             <th class="text-center">Availability</th>
                                             <th class="text-center">Alignment</th>
-                                            <!-- <th class="text-center">Section</th> -->
                                             <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
@@ -137,23 +139,6 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                                                     <?= $data['alignment'] ?>
                                                     <input type="hidden" value="<?= $data['alignment'] ?>" class="alignment" />
                                                 </td>
-                                                <!-- <td>
-                                                    <select class='section_<?= $id ?> p-1 text-white rounded-3' onchange="sectionchg(<?= $id ?>)"
-                                                        <?php
-                                                        $bgColor = ($data['section'] == 'none') ? '#dc3545' : '#198754';
-                                                        echo "style='background-color:$bgColor'";
-                                                        ?>>
-                                                        <option value='none' <?= ($data['section'] == 'none') ? 'selected' : ''; ?>>None</option>
-                                                        <option value='Top Trending' <?= ($data['section'] == 'Top Trending') ? 'selected' : ''; ?>>Top Trending</option>
-                                                        <?php
-                                                        foreach ($sectionlist as $data2) {
-                                                        ?>
-                                                            <option value='<?= $data2['section'] ?>' <?= ($data['section'] == $data2['section']) ? 'selected' : ''; ?>><?= $data2['section'] ?></option>
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </select>
-                                                </td> -->
                                                 <td>
                                                     <a class='btn btn-sm btn-icon btn-info' onclick="editImages(<?= $id ?>)" data-bs-toggle='tooltip' title='Images' data-bs-placement='top'>
                                                         <svg class='icon-20' width='20' fill='#fff' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -400,7 +385,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                     <div class="col-12">
                         <div class="form-group">
                             <label class="form-label" for="edit_images">Images</label>
-                            <input type="file" class="form-control" name="edit_images[]" id="edit_images" accept="image/*" multiple onchange="imagePreview('editimagePreview')">
+                            <input type="file" class="form-control" name="edit_images[]" id="edit_images" accept="image/*" multiple onchange="imagePreview('editimagePreview')" required />
                         </div>
                     </div>
                     <div class="col-12">
@@ -408,7 +393,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                     </div>
                 </div>
                 <input type="hidden" name="prd_edit_id" id="prd_edit_id">
-                <input type="submit" class="btn btn-success w-100" value="Update" readonly />
+                <input type="submit" id="editImgSubmit" class="btn btn-success w-100" value="Add" readonly />
             </form>
             <input id="closeModal" class="btn btn-danger w-100 mt-3" value="Close" readonly />
         </div>
@@ -431,17 +416,6 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
         // generate unique file name
         const generateUniqueFilename = () => {
             return 'img_' + Date.now().toString(36) + Math.random().toString(36).substring(2, 8) + '.webp';
-        };
-
-        // image compression
-        const compressImage = (file) => {
-            const options = {
-                maxSizeMB: 1,
-                maxWidthOrHeight: 1024,
-                useWebWorker: true,
-                fileType: 'image/webp'
-            };
-            return imageCompression(file, options);
         };
 
         // store alignment - start
@@ -761,10 +735,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                 $('#edit_vurl').val(result.url);
                 $('#edit_alignment').val(result.alignment);
                 delal = result.alignment;
-                $('#editimagePreview').empty();
-                if (result.image) {
-                    $('#editimagePreview').append(`<img src="uploads/${result.image}" style="max-width: 100%; max-height: 200px; margin: 5px;">`);
-                }
+
                 // open editpopup                      
                 $('#editoverlay').show();
             } else {
@@ -816,38 +787,6 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
         };
         // product availability - end
 
-        // section change - start
-        // const sectionchg = (id) => {
-        //     $.ajax({
-        //         type: "POST",
-        //         url: '<?= $admin_url ?>/backend/product/',
-        //         data: {
-        //             'section': $(".section_" + id).val(),
-        //             'id': id,
-        //             'req_type': 'section',
-        //         },
-        //         success: (response) => {
-        //             if (response.trim() === "Success") {
-        //                 Swal.fire({
-        //                     title: "Section Updated successfully",
-        //                     icon: "success",
-        //                     customClass: {
-        //                         confirmButton: 'my-swal-confirm-button',
-        //                     },
-        //                 }).then(() => {
-        //                     location.reload();
-        //                 });
-        //             } else {
-        //                 console.log(response.trim());
-        //             }
-        //         },
-        //         error: (error) => {
-        //             console.log(error);
-        //         }
-        //     });
-        // };
-        //section change -end
-
         $(document).ready(function() {
             // open add popup          
             $('#showPopup').click(() => {
@@ -888,7 +827,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
             });
 
             // ajax call
-            const sendFormData = (formData) => {
+            const sendFormData = (formData, id) => {
                 $.ajax({
                     type: 'POST',
                     url: '<?= $admin_url ?>/backend/product/',
@@ -898,7 +837,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                     success: (res) => {
                         if (res.trim() == "Success") {
                             Swal.fire({
-                                title: 'Details Uploaded Successfully!',
+                                title: `Details ${id === 2 ? "Updated" : "Uploaded"} Successfully!`,
                                 icon: 'success',
                                 customClass: {
                                     confirmButton: 'my-swal-confirm-button',
@@ -914,7 +853,19 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                                     confirmButton: 'my-swal-confirm-button',
                                 },
                             }).then(() => {
-                                $("#addDetails [type='submit']").prop('disabled', false).val("Add");
+                                switch (id) {
+                                    case 1:
+                                        $("#addDetails [type='submit']").prop('disabled', false).val("Add");
+                                        break;
+
+                                    case 2:
+                                        $("#editDetails [type='submit']").prop('disabled', false).val("Update");
+                                        break;
+
+                                    case 3:
+                                        $("#editImgDetails [type='submit']").prop('disabled', false).val("Add");
+                                        break;
+                                };
                             });
                         }
                     },
@@ -924,7 +875,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                 });
             };
 
-            // add item - start
+            // 1. add item - start
             $('#addDetails').submit(function(e) {
                 $("#addDetails [type='submit']").prop('disabled', true).val("Adding...");
                 e.preventDefault();
@@ -978,7 +929,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
 
                     if (files.length === 0) {
                         formData.append('images[]', '');
-                        sendFormData(formData);
+                        sendFormData(formData, 1);
                         return;
                     }
 
@@ -989,47 +940,24 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                     });
 
                     Promise.all(compressPromises).then(function() {
-                        sendFormData(formData);
+                        sendFormData(formData, 1);
+                    }).catch(err => {
+                        Swal.fire({
+                            title: "Please try again",
+                            text: "Image compression failed !",
+                            icon: 'error',
+                            customClass: {
+                                confirmButton: 'my-swal-confirm-button',
+                            },
+                        }).then(() => {
+                            $("#editImgDetails [type='submit']").prop('disabled', false).val("Add");
+                        });
                     });
-
-                    // $.ajax({
-                    //     type: 'POST',
-                    //     url: '<?= $admin_url ?>/backend/product/',
-                    //     data: formData,
-                    //     contentType: false,
-                    //     processData: false,
-                    //     success: (res) => {
-                    //         if (res.trim() == "Success") {
-                    //             Swal.fire({
-                    //                 title: 'Details Uploaded Successfully!',
-                    //                 icon: 'success',
-                    //                 customClass: {
-                    //                     confirmButton: 'my-swal-confirm-button',
-                    //                 },
-                    //             }).then((response) => {
-                    //                 location.reload();
-                    //             });
-                    //         } else {
-                    //             Swal.fire({
-                    //                 title: res.trim(),
-                    //                 icon: 'error',
-                    //                 customClass: {
-                    //                     confirmButton: 'my-swal-confirm-button',
-                    //                 },
-                    //             }).then(() => {
-                    //                 $("#addDetails [type='submit']").prop('disabled', false).val("Add");
-                    //             });
-                    //         }
-                    //     },
-                    //     error: (error) => {
-                    //         console.log(error);
-                    //     }
-                    // });
                 }
             });
             // add item - end
 
-            // Update item - start
+            // 2. Update item - start
             $('#editDetails').submit(function(e) {
                 $("#editDetails [type='submit']").prop('disabled', true).val("Updating...");
                 e.preventDefault();
@@ -1080,44 +1008,46 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                     formData.append("edit_alignment", alignment);
                     formData.append("edit_mrp", $("#edit_mrp").val());
                     formData.append("edit_selling_price", $("#edit_selling_price").val());
-                    formData.append("edit_image", $('#edit_image')[0].files[0]);
                     formData.append("req_type", "edit");
-                    $.ajax({
-                        type: 'POST',
-                        url: '<?= $admin_url ?>/backend/product/',
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: (res) => {
-                            if (res.trim() == "Success") {
-                                Swal.fire({
-                                    title: 'Details Updated Successfully!',
-                                    icon: 'success',
-                                    customClass: {
-                                        confirmButton: 'my-swal-confirm-button',
-                                    },
-                                }).then((response) => {
-                                    location.reload();
-                                });
-                            } else {
-                                Swal.fire({
-                                    title: res.trim(),
-                                    icon: 'error',
-                                    customClass: {
-                                        confirmButton: 'my-swal-confirm-button',
-                                    },
-                                }).then(() => {
-                                    $("#editDetails [type='submit']").prop('disabled', false).val("Update");
-                                });
-                            }
-                        },
-                        error: (error) => {
-                            console.log(error);
-                        }
-                    });
+                    sendFormData(formData, 2);
                 }
             });
             // Update item - end
+
+            // 3. add images - start
+            $('#editImgDetails').submit(function(e) {
+                e.preventDefault();
+                $("#editImgDetails [type='submit']").prop('disabled', true).val("Adding...");
+                const id = $("#prd_edit_id").val();
+                const imagesArray = product_list.find(item => item.id == id).images || '[]';
+                const files = $('#edit_images')[0].files;
+
+                const formData = new FormData();
+                formData.append("edit_id", id);
+                formData.append('oldimages', imagesArray);
+                formData.append("req_type", "addImages");
+
+                const compressPromises = $.map(files, function(file, index) {
+                    return compressImage(file).then(function(compressed) {
+                        formData.append('images[]', compressed, `image_${index}.webp`);
+                    });
+                });
+                // return;
+                Promise.all(compressPromises).then(function() {
+                    sendFormData(formData, 3);
+                }).catch(err => {
+                    Swal.fire({
+                        title: "Image compression failed",
+                        icon: 'error',
+                        customClass: {
+                            confirmButton: 'my-swal-confirm-button',
+                        },
+                    }).then(() => {
+                        $("#editImgDetails [type='submit']").prop('disabled', false).val("Add");
+                    });
+                });
+            });
+            // add images - end
 
             // ExportData - start
             $("#exportData").on("click", () => {
@@ -1132,15 +1062,46 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                     confirmButtonText: "Export"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = "backend/prdexport.php?export=1";
+                        window.location.href = "<?= $admin_url ?>/backend/export-data?export=product";
                     }
                 });
             });
             // ExportData - end
 
+            // Sample ExportData - start
+            $("#sampleexportData").on("click", () => {
+                Swal.fire({
+                    title: 'Do You want Export the Sample file!',
+                    icon: 'info',
+                    showCancelButton: true,
+                    customClass: {
+                        confirmButton: 'my-swal-confirm-button',
+                    },
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Export"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "<?= $admin_url ?>/backend/sample-export?type=product";
+                    }
+                });
+            });
+            // Sample ExportData - end
+
             // Import file - start
             $('#importData').submit(function(e) {
                 e.preventDefault();
+
+                // Show loader alert
+                Swal.fire({
+                    title: 'Importing file...',
+                    text: 'Please wait while the file is being processed.',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    didOpen: () => {
+                        Swal.showLoading(); // Show the loader
+                    }
+                });
+
                 const formData = new FormData();
                 formData.append("csv_file", $('#csv_file')[0].files[0]);
                 formData.append("req_type", "import");
@@ -1152,6 +1113,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                     processData: false,
                     success: (res) => {
                         if (res == "Success") {
+                            Swal.close(); // Close the loader
                             Swal.fire({
                                 title: 'File Imported Successfully!',
                                 icon: 'success',
@@ -1162,6 +1124,7 @@ $sectionlist = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                                 location.reload();
                             });
                         } else {
+                            Swal.close(); // Close the loader
                             Swal.fire({
                                 title: res.trim(),
                                 icon: 'error',

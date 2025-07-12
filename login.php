@@ -1,3 +1,7 @@
+<?php
+$active = basename($_SERVER['PHP_SELF']); //get active page from url
+?>
+
 <!doctype html>
 <html lang="en" dir="ltr">
 

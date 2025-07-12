@@ -44,6 +44,7 @@
         let navActive = active.split(".")[0];
         $("." + navActive).addClass('active');
 
+        // user logout
         const logoutPopup = () => {
             Swal.fire({
                 title: 'Are you sure?',
@@ -60,5 +61,16 @@
                     window.location.href = '<?= $admin_url ?>/utilities/logout/';
                 }
             });
+        };
+
+        // image compression
+        const compressImage = (file) => {
+            const options = {
+                maxSizeMB: 1,
+                maxWidthOrHeight: 1024,
+                useWebWorker: true,
+                fileType: 'image/webp'
+            };
+            return imageCompression(file, options);
         };
     </script>

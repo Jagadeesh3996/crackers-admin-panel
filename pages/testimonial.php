@@ -119,13 +119,13 @@ $testimonial = mysqli_fetch_all($result, MYSQLI_ASSOC);
             <h3 class="text-center mb-2">Add Testimonial</h3>
             <form id="addDetails" enctype="multipart/form-data">
                 <div class="row">
-                    <div class="col-12 col-md-6">
+                    <div class="col-12">
                         <div class="form-group">
                             <label class="form-label" for="name">Name</label>
                             <input type="text" class="form-control" name="name" id="name" required />
                         </div>
                     </div>
-                    <div class="col-12 col-md-8">
+                    <div class="col-12">
                         <div class="form-group">
                             <label class="form-label" for="review">Review</label>
                             <textarea name="review" class="form-control" id="review" cols="30" rows="3" required></textarea>
@@ -202,6 +202,53 @@ $testimonial = mysqli_fetch_all($result, MYSQLI_ASSOC);
             reader.readAsDataURL(file);
         };
 
+        // ajax call
+        const sendFormData = (formData, id) => {
+            $.ajax({
+                type: 'POST',
+                url: '<?= $admin_url ?>/backend/testimonial/',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: (response) => {
+                    console.log(response);
+                    response = JSON.parse(response);
+                    if (response.status) {
+                        Swal.fire({
+                            title: response.message,
+                            icon: 'success',
+                            customClass: {
+                                confirmButton: 'my-swal-confirm-button',
+                            },
+                        }).then((response) => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            title: response.message,
+                            icon: 'error',
+                            customClass: {
+                                confirmButton: 'my-swal-confirm-button',
+                            },
+                        }).then(() => {
+                            switch (id) {
+                                case 1:
+                                    $("#submit").prop('disabled', false).val("Add");
+                                    break;
+
+                                case 2:
+                                    $('#editSubmit').prop('disabled', false).val('Update');
+                                    break;
+                            };
+                        });
+                    }
+                },
+                error: (error) => {
+                    console.log(error);
+                }
+            });
+        };
+
         $(document).ready(function() {
             // open add popup            
             $('#showPopup').click(() => $('#overlay').show());
@@ -224,11 +271,7 @@ $testimonial = mysqli_fetch_all($result, MYSQLI_ASSOC);
             $('#addDetails').submit(function(e) {
                 $('#submit').prop('disabled', true).val('Adding...');
                 e.preventDefault();
-                const formData = new FormData();
-                formData.append("name", $("#name").val().trim());
-                formData.append("review", $("#review").val().trim());
-                formData.append("image", $('#image')[0].files[0]);
-                formData.append("req_type", "add");
+                const file = $('#image')[0].files[0];
                 if ($("#name").val().trim() == "" || $("#review").val().trim() == "") {
                     Swal.fire({
                         title: 'Field Cannot br Empty!',
@@ -240,39 +283,39 @@ $testimonial = mysqli_fetch_all($result, MYSQLI_ASSOC);
                         $('#submit').prop('disabled', false).val('Add');
                     });
                 } else {
-                    $.ajax({
-                        type: 'POST',
-                        url: '<?= $admin_url ?>/backend/testimonial/',
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: (res) => {
-                            if (res == "Success") {
-                                Swal.fire({
-                                    title: 'Data Uploaded Successfully!',
-                                    icon: 'success',
-                                    customClass: {
-                                        confirmButton: 'my-swal-confirm-button',
-                                    },
-                                }).then((response) => {
-                                    location.reload();
-                                });
-                            } else {
-                                Swal.fire({
-                                    title: res.trim(),
-                                    icon: 'error',
-                                    customClass: {
-                                        confirmButton: 'my-swal-confirm-button',
-                                    },
-                                }).then(() => {
-                                    $('#submit').prop('disabled', false).val('Add');
-                                });
-                            }
-                        },
-                        error: (error) => {
-                            console.log(error);
-                        }
-                    });
+                    const formData = new FormData();
+                    formData.append("name", $("#name").val().trim());
+                    formData.append("review", $("#review").val().trim());
+                    formData.append("req_type", "add");
+
+                    if (file) {
+                        compressImage(file).then(function(compressed) {
+                            formData.append('image[]', compressed, 'image_0.webp');
+                            sendFormData(formData, 1);
+                        }).catch(function(error) {
+                            Swal.fire({
+                                title: "Please try again",
+                                text: "Image compression failed !",
+                                icon: 'error',
+                                customClass: {
+                                    confirmButton: 'my-swal-confirm-button',
+                                },
+                            }).then(() => {
+                                $('#submit').prop('disabled', false).val('Add');
+                            });
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Please try again",
+                            text: "File not found !",
+                            icon: 'error',
+                            customClass: {
+                                confirmButton: 'my-swal-confirm-button',
+                            },
+                        }).then(() => {
+                            $('#submit').prop('disabled', false).val('Add');
+                        });
+                    }
                 }
             });
             // add - end
@@ -281,13 +324,7 @@ $testimonial = mysqli_fetch_all($result, MYSQLI_ASSOC);
             $('#editDetails').submit(function(e) {
                 $('#editSubmit').prop('disabled', true).val('Updating...');
                 e.preventDefault();
-                const editFormData = new FormData();
-                editFormData.append("id", $("#edit_id").val().trim());
-                editFormData.append("name", $("#edit_name").val().trim());
-                editFormData.append("review", $("#edit_review").val().trim());
-                editFormData.append("image_name", $("#edit_old_image").val().trim());
-                editFormData.append("editImage", $('#edit_image')[0].files[0]);
-                editFormData.append("req_type", "edit");
+                const file = $('#edit_image')[0].files[0];
                 if ($("#edit_name").val().trim() == "" || $("#edit_review").val().trim() == "") {
                     Swal.fire({
                         title: 'Field Cannot br Empty!',
@@ -299,39 +336,67 @@ $testimonial = mysqli_fetch_all($result, MYSQLI_ASSOC);
                         $('#editSubmit').prop('disabled', false).val('Update');
                     });
                 } else {
-                    $.ajax({
-                        type: 'POST',
-                        url: '<?= $admin_url ?>/backend/testimonial/',
-                        data: editFormData,
-                        contentType: false,
-                        processData: false,
-                        success: (res) => {
-                            if (res == "Success") {
-                                Swal.fire({
-                                    title: 'Details Updated Successfully!',
-                                    icon: 'success',
-                                    customClass: {
-                                        confirmButton: 'my-swal-confirm-button',
-                                    },
-                                }).then(() => {
-                                    location.reload();
-                                });
-                            } else {
-                                Swal.fire({
-                                    title: res.trim(),
-                                    icon: 'error',
-                                    customClass: {
-                                        confirmButton: 'my-swal-confirm-button',
-                                    },
-                                }).then(() => {
-                                    $('#editSubmit').prop('disabled', false).val('Update');
-                                });
-                            }
-                        },
-                        error: (error) => {
-                            console.log(error);
-                        }
-                    });
+                    const editFormData = new FormData();
+                    editFormData.append("id", $("#edit_id").val().trim());
+                    editFormData.append("name", $("#edit_name").val().trim());
+                    editFormData.append("review", $("#edit_review").val().trim());
+                    editFormData.append("image_name", $("#edit_old_image").val().trim());
+                    editFormData.append("req_type", "edit");
+
+                    if (file) {
+                        compressImage(file).then(function(compressed) {
+                            editFormData.append('image[]', compressed, 'image_0.webp');
+                            sendFormData(editFormData, 2);
+                        }).catch(function(error) {
+                            Swal.fire({
+                                title: "Please try again",
+                                text: "Image compression failed !",
+                                icon: 'error',
+                                customClass: {
+                                    confirmButton: 'my-swal-confirm-button',
+                                },
+                            }).then(() => {
+                                $('#editSubmit').prop('disabled', false).val('Update');
+                            });
+                        });
+                    } else {
+                        editFormData.append('image[]', []);
+                        sendFormData(editFormData, 2);
+                    }
+
+                    // $.ajax({
+                    //     type: 'POST',
+                    //     url: '<?= $admin_url ?>/backend/testimonial/',
+                    //     data: editFormData,
+                    //     contentType: false,
+                    //     processData: false,
+                    //     success: (res) => {
+                    //         if (res == "Success") {
+                    //             Swal.fire({
+                    //                 title: 'Details Updated Successfully!',
+                    //                 icon: 'success',
+                    //                 customClass: {
+                    //                     confirmButton: 'my-swal-confirm-button',
+                    //                 },
+                    //             }).then(() => {
+                    //                 location.reload();
+                    //             });
+                    //         } else {
+                    //             Swal.fire({
+                    //                 title: res.trim(),
+                    //                 icon: 'error',
+                    //                 customClass: {
+                    //                     confirmButton: 'my-swal-confirm-button',
+                    //                 },
+                    //             }).then(() => {
+                    //                 $('#editSubmit').prop('disabled', false).val('Update');
+                    //             });
+                    //         }
+                    //     },
+                    //     error: (error) => {
+                    //         console.log(error);
+                    //     }
+                    // });
                 }
             });
             //update - end

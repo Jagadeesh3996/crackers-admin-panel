@@ -5,7 +5,11 @@ function GetPrd()
 {
     global $conn;
     // query
-    $query1 = "SELECT * FROM tbl_product WHERE status >= 1 GROUP BY name ASC";
+    $query1 = "SELECT a.* FROM tbl_product AS a 
+                LEFT JOIN tbl_category AS b ON b.name = a.category 
+                WHERE b.status = 1 
+                AND a.status >= 1 
+                GROUP BY a.name ASC";
     $result1 = mysqli_query($conn, $query1);
     $object = [];
     if ($result1) {
