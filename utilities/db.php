@@ -32,7 +32,7 @@ $site_data = json_decode($data['shop_details'], true);
 
 // for live
 $domain = $site_data['shop_url'];
-$site_url = $protocol . '://' . $domain . '/newsite';
+$site_url = $protocol . '://newsite.' . $domain;
 $admin_url = $protocol . '://newadmin.' . $domain;
 $site_name = $site_data['shop_name'];
 $site_code = $site_data['shop_code'];
