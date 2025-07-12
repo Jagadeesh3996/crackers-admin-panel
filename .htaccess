@@ -1,6 +1,6 @@
 
 <IfModule mod_headers.c>
-    Header set Access-Control-Allow-Origin "https://newsite.asrpyropark.com/"
+    Header set Access-Control-Allow-Origin "https://newsite.asrpyropark.com"
 </IfModule>
 <IfModule mod_rewrite.c>
     RewriteEngine On
