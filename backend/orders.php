@@ -40,22 +40,36 @@ function sendPhpMail($name, $order_id, $final_total, $email)
     $message .= "Please find the attachment for Estimation details.";
 
     try {
-        $mail->AddReplyTo($site_email, $site_name);
-        $mail->AddAddress($email, $name);
-        $mail->addBCC($site_email, 'Admin');
-        $mail->SetFrom($site_email, $site_name);
-        $mail->Subject   = 'Price Estimation - reg';
+        // SMTP configuration
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';           // Replace with your SMTP server
+        $mail->SMTPAuth = true;
+        $mail->Username = 'gugancrackers24@gmail.com';        // SMTP username
+        $mail->Password = 'xocr cyaw dwoz nxud';        // SMTP password
+        $mail->SMTPSecure = 'ssl';                     // 'tls' or 'ssl'
+        $mail->Port = 465;                             // 587 for TLS, 465 for SSL
+
+        // Sender and recipient
+        $mail->setFrom($site_email, $site_name);
+        $mail->addReplyTo($site_email, $site_name);
+        $mail->addAddress($email, $name);
+        $mail->addCC($site_email, 'Admin');
+
+        $mail->Subject = 'Price Estimation - reg';
         $mail->IsHTML(true);
         $mail->Body = $message;
-        $mail->AddAttachment(__DIR__ . '/../pdf/price_estimation_' . $order_id . '.pdf', 'price_estimation_' . $order_id . '.pdf');    //Optional name
 
-        if ($mail->Send()) {
-            return true;
-        } else {
-            return false;
+        // Attachment (only if the file exists)
+        $pdfPath = $_SERVER['DOCUMENT_ROOT'] . '/../pdf/price_estimation_' . $order_id . '.pdf';
+        if (file_exists($pdfPath)) {
+            $mail->addAttachment($pdfPath, 'price_estimation_' . $order_id . '.pdf');           //Optional name
         }
+
+        // Send the email
+        $mail->send();
     } catch (Exception $e) {
-        return false;
+        // Log error, but do not return
+        error_log("Mailer Error: " . $mail->ErrorInfo);
     }
 }
 
@@ -64,7 +78,6 @@ function Add()
     extract($_REQUEST);
     global $conn;
 
-    // $jsonproducts = $conn->real_escape_string($products);
     $date = date("Y-m-d");
 
     // Begin transaction
@@ -104,9 +117,9 @@ function Add()
         }
 
         // Send SMS first (optional, can be done after insert)
-        // sendSms($name, $order_id, $final_total, $site_mobile_number);
+        sendSms($name, $order_id, $final_total, $site_mobile_number);
         generatePdf($order_id);
-        // sendPhpMail($name, $order_id, $final_total, $email);
+        sendPhpMail($name, $order_id, $final_total, $email);
 
         // Commit the transaction
         $conn->commit();
