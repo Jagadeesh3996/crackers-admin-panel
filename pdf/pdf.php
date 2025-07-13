@@ -14,12 +14,12 @@ function pdfGenration($pitem, $oid, $view = false)
     $dompdf = new Dompdf($options);
 
     // Register the Tamil font
-    $fontDir = __DIR__ . '/../assets/fonts';
-    $fontName = 'NotoSansTamil';
+    // $fontDir = __DIR__ . '/../assets/fonts';
+    // $fontName = 'NotoSansTamil';
 
     // Tell Dompdf about this font
-    $dompdf->getOptions()->setChroot(__DIR__);
-    $dompdf->setBasePath($fontDir);
+    $dompdf->getOptions()->setChroot(__DIR__ . '/../');
+    // $dompdf->setBasePath($fontDir);
 
     $date = $pitem['date'];
     $total = $pitem['total'];
@@ -39,8 +39,8 @@ function pdfGenration($pitem, $oid, $view = false)
                         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@100..900&display=swap" rel="stylesheet">
                         <style>
                             @font-face {
-                                font-family: "' . $fontName . '";
-                                src: url("fonts/NotoSansTamil.ttf") format("truetype");
+                                font-family: "NotoSansTamil";
+                                src: url("assets/fonts/NotoSansTamil.ttf") format("truetype");
                             }
                             .tamil {
                                 font-family: "Noto Sans Tamil", sans-serif;
@@ -50,7 +50,8 @@ function pdfGenration($pitem, $oid, $view = false)
                                 font-variation-settings: "wdth" 100;
                             }
                             body {
-                                font-family: "'.$fontName.'";
+                                font-family: "NotoSansTamil";
+                                font-size: 14px;
                             }
                             td{
                                 padding: 5px;
