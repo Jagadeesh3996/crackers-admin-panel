@@ -2,7 +2,7 @@
 include('./utilities/session.php');
 
 // Fetch data from the database
-$query = "SELECT p.*, c.discount FROM tbl_product p JOIN tbl_category c ON p.category = c.name WHERE p.status >= '1' and c.status = '1' GROUP BY CAST(SUBSTRING_INDEX(p.alignment, ' ', 1) AS UNSIGNED), SUBSTRING(p.alignment, LOCATE(' ', p.alignment) + 1) ASC";
+$query = "SELECT p.*, c.discount FROM tbl_product p JOIN tbl_category c ON p.category = c.name WHERE p.status >= 1 and c.status = 1 GROUP BY CAST(SUBSTRING_INDEX(p.alignment, ' ', 1) AS UNSIGNED), SUBSTRING(p.alignment, LOCATE(' ', p.alignment) + 1) ASC";
 
 $result = mysqli_query($conn, $query);
 $totalProduct = mysqli_num_rows($result);
@@ -14,7 +14,7 @@ $totalEstimate = mysqli_num_rows($result2);
 
 // Fetch data from the database
 $todayDate = date("Y-m-d");
-$query3 = "SELECT * FROM tbl_orders WHERE date='$todayDate' GROUP BY order_id";
+$query3 = "SELECT * FROM tbl_orders WHERE date = '$todayDate' GROUP BY order_id";
 $result3 = mysqli_query($conn, $query3);
 $todayOrder = mysqli_num_rows($result3);
 
@@ -190,6 +190,31 @@ $orderItems = mysqli_fetch_all($result5, MYSQLI_ASSOC);
                                                 $serialNumber = 1;
                                                 foreach ($orderItems as $oitem) {
                                                     $id = $oitem['id'];
+                                                    switch ($oitem['status']) {
+                                                        case 6:
+                                                            $status = "Cancelled";
+                                                            break;
+
+                                                        case 5:
+                                                            $status = "Deliverd";
+                                                            break;
+
+                                                        case 4:
+                                                            $status = "Packing";
+                                                            break;
+
+                                                        case 3:
+                                                            $status = "Amt Received";
+                                                            break;
+
+                                                        case 2:
+                                                            $status = "AMT Pending";
+                                                            break;
+
+                                                        default:
+                                                            $status = "Order Received";
+                                                            break;
+                                                    }
                                                 ?>
                                                     <tr>
                                                         <td><?= $serialNumber++ ?></td>
@@ -199,33 +224,13 @@ $orderItems = mysqli_fetch_all($result5, MYSQLI_ASSOC);
                                                         <td><?= $oitem['phone'] ?></td>
                                                         <td style="white-space: break-spaces;"><?= $oitem['address'] ?></td>
                                                         <td>&#8377; <?= number_format($oitem['final_total']) ?></td>
-                                                        <td>
-                                                            <select class='status_<?= $id ?> p-1 text-white rounded-3' onchange="statuschg(<?= $id ?>)"
-                                                                <?php
-                                                                $bgColor = ($oitem['status'] == 1) ? '#fd7e14' : (($oitem['status'] == 2) ? '#198754' : (($oitem['status'] == 3) ? '#dc3545' : '#6165e8'));
-                                                                echo "style='background-color:$bgColor'";
-                                                                ?>>
-                                                                <option value=1 <?= ($oitem['status'] == 1) ? 'selected' : ''; ?>>Order Received</option>
-                                                                <option value=2 <?= ($oitem['status'] == 2) ? 'selected' : ''; ?>>AMT Pending</option>
-                                                                <option value=3 <?= ($oitem['status'] == 3) ? 'selected' : ''; ?>>Amt Received</option>
-                                                                <option value=4 <?= ($oitem['status'] == 4) ? 'selected' : ''; ?>>Packing</option>
-                                                                <option value=5 <?= ($oitem['status'] == 5) ? 'selected' : ''; ?>>Deliverd</option>
-                                                                <option value=6 <?= ($oitem['status'] == 6) ? 'selected' : ''; ?>>Cancelled</option>
-                                                            </select>
-                                                        </td>
+                                                        <td><?= $status ?></td>
                                                         <td>
                                                             <a class='btn btn-sm btn-icon btn-success' href='<?= $admin_url ?>/pages/orderpdf?oid=<?= $oitem['order_id'] ?>' target='_blank' data-bs-toggle='tooltip' title='View' data-bs-placement='top'>
                                                                 <svg class='icon-20' width='20' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512' stroke='currentColor'>
                                                                     <path fill='#fff' d='M288 80c-65.2 0-118.8 29.6-159.9 67.7C89.6 183.5 63 226 49.4 256c13.6 30 40.2 72.5 78.6 108.3C169.2 402.4 222.8 432 288 432s118.8-29.6 159.9-67.7C486.4 328.5 513 286 526.6 256c-13.6-30-40.2-72.5-78.6-108.3C406.8 109.6 353.2 80 288 80zM95.4 112.6C142.5 68.8 207.2 32 288 32s145.5 36.8 192.6 80.6c46.8 43.5 78.1 95.4 93 131.1c3.3 7.9 3.3 16.7 0 24.6c-14.9 35.7-46.2 87.7-93 131.1C433.5 443.2 368.8 480 288 480s-145.5-36.8-192.6-80.6C48.6 356 17.3 304 2.5 268.3c-3.3-7.9-3.3-16.7 0-24.6C17.3 208 48.6 156 95.4 112.6zM288 336c44.2 0 80-35.8 80-80s-35.8-80-80-80c-.7 0-1.3 0-2 0c1.3 5.1 2 10.5 2 16c0 35.3-28.7 64-64 64c-5.5 0-10.9-.7-16-2c0 .7 0 1.3 0 2c0 44.2 35.8 80 80 80zm0-208a128 128 0 1 1 0 256 128 128 0 1 1 0-256z' />
                                                                 </svg>
                                                             </a>
-                                                            <!-- <a class='btn btn-sm btn-icon btn-danger' onclick="deleteItem(<?= $id ?>)" data-bs-toggle='tooltip' title='Delete' data-bs-placement='top'>
-                                                                <svg class='icon-20' data-item-id='<?= $id ?>' width='20' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg' stroke='currentColor'>
-                                                                    <path d='M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'></path>
-                                                                    <path d='M20.708 6.23975H3.75' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'></path>
-                                                                    <path d='M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'></path>
-                                                                </svg>
-                                                            </a> -->
                                                         </td>
                                                     </tr>
                                                 <?php
@@ -258,14 +263,6 @@ $orderItems = mysqli_fetch_all($result5, MYSQLI_ASSOC);
         let pi = 0;
         salesList = [];
         ordersList = [];
-
-        // $('#datatable').DataTable({
-        //     paging: false, // 🔸 Hide pagination
-        //     searching: false, // 🔸 Hide search box
-        //     info: false, // 🔸 Hide "Showing x of y entries"
-        //     lengthChange: false, // 🔸 Hide entries per page dropdown
-        //     // ordering: false // 🔸 Disable column sorting (optional)
-        // });
 
         const chart = (listX, value, label) => {
             const maxValue = Math.max(...value);

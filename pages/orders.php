@@ -103,10 +103,14 @@ $orderItems = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                                 <td style="white-space: break-spaces;"><?= $oitem['address'] ?></td>
                                                 <td>&#8377; <?= number_format($oitem['final_total']) ?></td>
                                                 <td>
-                                                    <select class='status_<?= $id ?> p-1 text-white rounded-3' onchange="statuschg(<?= $id ?>)"
+                                                    <select class='status_<?= $id ?> p-1 text-dark rounded-3' onchange="statuschg(<?= $id ?>)"
                                                         <?php
-                                                        $bgColor = ($oitem['status'] == 1) ? '#fd7e14' : (($oitem['status'] == 2) ? '#198754' : (($oitem['status'] == 3) ? '#dc3545' : '#6165e8'));
-                                                        echo "style='background-color:$bgColor'";
+                                                        // $bgColor = ($oitem['status'] == 1) ? '#fd7e14' : ($oitem['status'] == 2) ? '#198754' : ($oitem['status'] == 3) ? 
+                                                        // '#198754' : ($oitem['status'] == 3) ? 
+                                                        // '#198754' : ($oitem['status'] == 3) ? 
+                                                        // '#198754' : ($oitem['status'] == 3) ? 
+                                                        // '#dc3545' : '#6165e8';
+                                                        // echo "style='background-color:$bgColor'";
                                                         ?>>
                                                         <option value=1 <?= ($oitem['status'] == 1) ? 'selected' : ''; ?>>Order Received</option>
                                                         <option value=2 <?= ($oitem['status'] == 2) ? 'selected' : ''; ?>>AMT Pending</option>
