@@ -5,8 +5,12 @@ require('../dompdf/autoload.inc.php');
 include("../utilities/db.php");
 
 use Dompdf\Dompdf;
+use Dompdf\Options;
 
-$dompdf = new Dompdf();
+$options = new Options();
+$dompdf->set('isRemoteEnabled', true);
+$options->set('enable_html5_parser', true);
+$dompdf = new Dompdf($options);
 
 // check url parameter  is set or not
 if (isset($_GET['invoice'])) {
@@ -188,7 +192,6 @@ if ($item = mysqli_fetch_array($result)) {
                 </html>';
 
     // Initialize dompdf
-    $dompdf->set_option('enable_html5_parser', TRUE);
     $dompdf->loadHtml($html);
     $dompdf->setPaper('letter', 'portrait');
     $dompdf->render();
