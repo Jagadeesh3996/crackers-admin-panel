@@ -1,5 +1,5 @@
 <?php
-require('../dompdf/autoload.inc.php');
+require("../dompdf/autoload.inc.php");
 
 use Dompdf\Dompdf;
 
@@ -8,11 +8,6 @@ function pdfGenration($pitem, $oid, $view = false)
     include("../utilities/db.php");
     $dompdf = new Dompdf();
     $date = $pitem['date'];
-    $c_name = $pitem['name'];
-    $c_email = $pitem['email'];
-    $c_mobile = $pitem['phone'];
-    $c_whatsapp = $pitem['whatsapp'];
-    $c_address = $pitem['address'];
     $total = $pitem['total'];
     $pcharge = $pitem['packing_charge'];
     $promodiscount = $pitem['promotion_discount'];
@@ -99,11 +94,11 @@ function pdfGenration($pitem, $oid, $view = false)
                                 <tr>
                                     <td colspan="4" class="none rline">
                                         <h4><center><b>Customer Details</b></center></h4>
-                                        <p class="tamil">Name : <b>' . $c_name . '</b></p>
-                                        <p>Mobile : <b>' . $c_mobile . '</b></p>
-                                        <p>Whatsapp : <b>' . $c_whatsapp . '</b></p>
-                                        <p>E-Mail Id : <b>' . $c_email . '</b></p>
-                                        <p class="tamil">Address : <b>' . $c_address . '</b></p>
+                                        <p class="tamil">Name : <b>' . $pitem['name'] . '</b></p>
+                                        <p>Mobile : <b>' . $pitem['phone'] . '</b></p>
+                                        <p>Whatsapp : <b>' . $pitem['whatsapp'] . '</b></p>
+                                        <p>E-Mail Id : <b>' . $pitem['email'] . '</b></p>
+                                        <p class="tamil">Address : <b>' . $pitem['address'] . '</b></p>
                                         <p class="tamil">Refer by : <b>' . $pitem['refer'] . '</b></p>
                                     </td>
                                     <td colspan="4" class="none">
@@ -124,25 +119,24 @@ function pdfGenration($pitem, $oid, $view = false)
                                     <td><b>Price (Rs)</b></td>
                                     <td><b>Amount (Rs)</b></td>
                                 </tr>';
-
     $k = 1;
     $totalqty = 0;
     $nettotal = 0;
     foreach ($products as $key => $prd) {
-        $totalqty += $prd->prd_qty;
-        $nettotal += $prd->prd_nettotal;
-        $p_id = $prd->prd_id;
+        $totalqty += $prd->p_quantity;
+        $nettotal += $prd->p_nettotal;
+        $p_id = $prd->p_id;
         $q2 = "SELECT * FROM tbl_product WHERE id = '$p_id' AND status >= 1 LIMIT 1";
         $res2 = mysqli_query($conn, $q2);
         $item = mysqli_fetch_array($res2);
         $html .= '<tr class="rbd">
                         <td>' . $k . '</td>
                         <td>' . $item['alignment'] . '</td>
-                        <td colspan="2">' . $prd->prd_name . '</td>
-                        <td>' . number_format($prd->prd_mrp, 2) . '</td>
-                        <td>' . $prd->prd_qty . '</td>
-                        <td>' . number_format($prd->prd_price, 2) . '</td>
-                        <td>' . number_format($prd->prd_total, 2) . '</td>
+                        <td colspan="2">' . $prd->p_name . '</td>
+                        <td>' . number_format($prd->p_mrp, 2) . '</td>
+                        <td>' . $prd->p_quantity . '</td>
+                        <td>' . number_format($prd->p_price, 2) . '</td>
+                        <td>' . number_format($prd->p_total, 2) . '</td>
                     </tr>';
         $k++;
     }
