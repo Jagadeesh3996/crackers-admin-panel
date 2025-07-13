@@ -64,7 +64,7 @@ function Add()
     extract($_REQUEST);
     global $conn;
 
-    $jsonproducts = $conn->real_escape_string($products);
+    // $jsonproducts = $conn->real_escape_string($products);
     $date = date("Y-m-d");
 
     // Begin transaction
@@ -80,7 +80,7 @@ function Add()
         if (!$stmt) {
             throw new Exception("Prepare failed: " . $conn->error);
         }
-        $stmt->bind_param('ssssssssiiii', $date, $name, $phone, $whatsapp, $email, $address, $refer, $jsonproducts, $total, $packing_charge, $promotion_discount, $final_total);
+        $stmt->bind_param('ssssssssiiii', $date, $name, $phone, $whatsapp, $email, $address, $refer, $products, $total, $packing_charge, $promotion_discount, $final_total);
 
         // Execute the prepared statement
         if (!$stmt->execute()) {
