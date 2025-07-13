@@ -17,10 +17,6 @@ function pdfGenration($pitem, $oid, $view = false)
     $promodiscount = $pitem['promotion_discount'];
     $finialtotal = $total + $pcharge - $promodiscount;
     $products = json_decode($pitem['products']);
-    var_dump($pitem['products']);
-    var_dump($products);
-    exit;
-
     $dateonly = date("d-m-Y");
 
     // Create HTML content for the PDF
