@@ -2,17 +2,25 @@
 require("../dompdf/autoload.inc.php");
 
 use Dompdf\Dompdf;
+use Dompdf\Options;
 
 function pdfGenration($pitem, $oid, $view = false)
 {
     include("../utilities/db.php");
-    $dompdf = new Dompdf();
+    $options = new Options();
+    $options->set('isRemoteEnabled', true);
+    $options->set('enable_html5_parser', true);
+    $dompdf = new Dompdf($options);
     $date = $pitem['date'];
     $total = $pitem['total'];
     $pcharge = $pitem['packing_charge'];
     $promodiscount = $pitem['promotion_discount'];
     $finialtotal = $total + $pcharge - $promodiscount;
     $products = json_decode($pitem['products']);
+    var_dump($pitem['products']);
+    var_dump($products);
+    exit;
+
     $dateonly = date("d-m-Y");
 
     // Create HTML content for the PDF
@@ -84,9 +92,9 @@ function pdfGenration($pitem, $oid, $view = false)
                                     <td colspan="4" class="bline right">Email : <b>' . $site_email . '</b></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="3" class="bline"><center><img height="100" src="' . $admin_url . '/assets/images/logo.png" alt="logo" ></center></td>
+                                    <td colspan="3" class="bline"><center><img height="100" src="' .  $admin_url . '/assets/images/logo.png" alt="logo" ></center></td>
                                     <td colspan="4" class="bline"><center>
-                                        <h2><b>' . $admin_url . '</b></h2>
+                                        <h2><b>' . $site_name . '</b></h2>
                                         <p>' . $site_address . '</p>
                                     </center></td>
                                     <td class="bline"></td>
@@ -173,7 +181,6 @@ function pdfGenration($pitem, $oid, $view = false)
     </html>';
 
     // Initialize dompdf
-    $dompdf->set_option('enable_html5_parser', TRUE);
     $dompdf->loadHtml($html);
     $dompdf->setPaper('letter', 'portrait');
     $dompdf->render();
