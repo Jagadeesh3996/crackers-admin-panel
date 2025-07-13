@@ -7,20 +7,10 @@ use Dompdf\Options;
 function pdfGenration($pitem, $oid, $view = false)
 {
     include("../utilities/db.php");
-
     $options = new Options();
     $options->set('isRemoteEnabled', true);
     $options->set('enable_html5_parser', true);
     $dompdf = new Dompdf($options);
-
-    // Register the Tamil font
-    $fontDir = __DIR__ . '/../assets/fonts';
-    $fontName = 'NotoSansTamil';
-
-    // Tell Dompdf about this font
-    $dompdf->getOptions()->setChroot(__DIR__);
-    $dompdf->setBasePath($fontDir);
-
     $date = $pitem['date'];
     $total = $pitem['total'];
     $pcharge = $pitem['packing_charge'];
@@ -38,10 +28,6 @@ function pdfGenration($pitem, $oid, $view = false)
                         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
                         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@100..900&display=swap" rel="stylesheet">
                         <style>
-                            @font-face {
-                                font-family: "' . $fontName . '";
-                                src: url("fonts/NotoSansTamil-Regular.ttf") format("truetype");
-                            }
                             .tamil {
                                 font-family: "Noto Sans Tamil", sans-serif;
                                 font-optical-sizing: auto;
@@ -50,7 +36,7 @@ function pdfGenration($pitem, $oid, $view = false)
                                 font-variation-settings: "wdth" 100;
                             }
                             body {
-                                font-family: "'.$fontName.'";
+                                font-family: "Arial", sans-serif;
                             }
                             td{
                                 padding: 5px;
@@ -191,7 +177,7 @@ function pdfGenration($pitem, $oid, $view = false)
     </html>';
 
     // Initialize dompdf
-    $dompdf->loadHtml($html, 'UTF-8');
+    $dompdf->loadHtml($html);
     $dompdf->setPaper('letter', 'portrait');
     $dompdf->render();
 
