@@ -60,7 +60,7 @@ function sendPhpMail($name, $order_id, $final_total, $email)
         $mail->Body = $message;
 
         // Attachment (only if the file exists)
-        $pdfPath = $_SERVER['DOCUMENT_ROOT'] . '/../pdf/price_estimation_' . $order_id . '.pdf';
+        $pdfPath = __DIR__ . '/../pdf/price_estimation_' . $order_id . '.pdf';
         if (file_exists($pdfPath)) {
             $mail->addAttachment($pdfPath, 'price_estimation_' . $order_id . '.pdf');           //Optional name
         }
