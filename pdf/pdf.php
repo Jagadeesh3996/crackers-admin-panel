@@ -40,7 +40,7 @@ function pdfGenration($pitem, $oid, $view = false)
                         <style>
                             @font-face {
                                 font-family: "' . $fontName . '";
-                                src: url("fonts/NotoSansTamil-Regular.ttf") format("truetype");
+                                src: url("fonts/NotoSansTamil.ttf") format("truetype");
                             }
                             .tamil {
                                 font-family: "Noto Sans Tamil", sans-serif;
