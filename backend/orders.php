@@ -41,13 +41,13 @@ function sendPhpMail($name, $order_id, $final_total, $email)
 
     try {
         // SMTP configuration
-        $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';           // Replace with your SMTP server
-        $mail->SMTPAuth = true;
-        $mail->Username = 'gugancrackers24@gmail.com';        // SMTP username
-        $mail->Password = 'xocr cyaw dwoz nxud';        // SMTP password
-        $mail->SMTPSecure = 'ssl';                     // 'tls' or 'ssl'
-        $mail->Port = 465;                             // 587 for TLS, 465 for SSL
+        // $mail->isSMTP();
+        // $mail->Host = 'smtp.gmail.com';           // Replace with your SMTP server
+        // $mail->SMTPAuth = true;
+        // $mail->Username = 'gugancrackers24@gmail.com';        // SMTP username
+        // $mail->Password = 'xocr cyaw dwoz nxud';        // SMTP password
+        // $mail->SMTPSecure = 'ssl';                     // 'tls' or 'ssl'
+        // $mail->Port = 465;                             // 587 for TLS, 465 for SSL
 
         // Sender and recipient
         $mail->setFrom($site_email, $site_name);

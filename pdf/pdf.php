@@ -13,13 +13,8 @@ function pdfGenration($pitem, $oid, $view = false)
     $options->set('enable_html5_parser', true);
     $dompdf = new Dompdf($options);
 
-    // Register the Tamil font
-    // $fontDir = __DIR__ . '/../assets/fonts';
-    // $fontName = 'NotoSansTamil';
-
     // Tell Dompdf about this font
     $dompdf->getOptions()->setChroot(__DIR__ . '/../');
-    // $dompdf->setBasePath($fontDir);
 
     $date = $pitem['date'];
     $total = $pitem['total'];
