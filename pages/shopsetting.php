@@ -125,6 +125,12 @@ $bank_details = $row['bank_details'] == null ? '{}' : $row['bank_details'];
                                     </div>
                                     <div class="col-md-3 col-12">
                                         <div class="form-group">
+                                            <label for="googlemap_embed_url">GoogleMap Embed URL</label>
+                                            <input type="text" class="form-control shop" name="googlemap_embed_url" id="googlemap_embed_url" value="<?= $shop_details['googlemap_embed_url'] ?>" oninput="getSrc()" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-12">
+                                        <div class="form-group">
                                             <label for="address">Address</label>
                                             <textarea class="form-control shop" name="address" id="address" readonly><?= $shop_details['address'] ?></textarea>
                                         </div>
@@ -344,6 +350,14 @@ $bank_details = $row['bank_details'] == null ? '{}' : $row['bank_details'];
         };
         let bank_details = {
             ...<?= $bank_details ?>
+        };
+
+        // get src from iframe
+        const getSrc = () => {
+            const iframeString = $("#googlemap_embed_url").val().trim();
+            const match = iframeString.match(/src="([^"]+)"/);
+            const src = match ? match[1] : $("#googlemap_embed_url").val().trim();
+            $("#googlemap_embed_url").val(src);
         };
 
         // validations start
@@ -655,6 +669,7 @@ $bank_details = $row['bank_details'] == null ? '{}' : $row['bank_details'];
             const sUrl = $('#shop_url').val().trim();
             const email = $('#email').val().trim();
             const location = $('#googlemap_location_url').val().trim();
+            const embed = $('#googlemap_embed_url').val().trim();
             const ads = $('#address').val().trim();
             const address = ads.replace(/\n/g, ' ');
             const mobile = $('#mobile_number').val();
@@ -735,6 +750,7 @@ $bank_details = $row['bank_details'] == null ? '{}' : $row['bank_details'];
                 'alternate_mobile_number': altNumber,
                 'email': email,
                 'googlemap_location_url': location,
+                'googlemap_embed_url': embed,
                 'address': address,
                 'gst_no': gstno,
                 'facebook': $("#facebook").val().trim(),

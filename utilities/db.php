@@ -42,6 +42,7 @@ $site_mobile_number = $site_data['mobile_number'];
 $site_alternate_mobile_number = $site_data['alternate_mobile_number'];
 $site_email = $site_data['email'];
 $site_googlemap_location_url = $site_data['googlemap_location_url'];
+$site_googlemap_embed_url = $site_data['googlemap_embed_url'];
 $site_minimum_order = $site_data['shop_minimum_order'];
 $site_address = $site_data['address'];
 $site_facebook = $site_data['facebook'];
