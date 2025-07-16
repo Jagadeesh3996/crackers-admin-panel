@@ -185,7 +185,7 @@ $active = basename($_SERVER['PHP_SELF']); //get active page from url
                     </a>
                 </li>
 
-                <!-- <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link reports" aria-current="page" href="<?= $admin_url ?>/pages/reports/">
                         <i class="icon">
                             <svg width="20" class="icon-20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
@@ -194,7 +194,7 @@ $active = basename($_SERVER['PHP_SELF']); //get active page from url
                         </i>
                         <span class="item-name">Reports</span>
                     </a>
-                </li> -->
+                </li>
 
                 <li class="nav-item">
                     <a class="nav-link testimonial" aria-current="page" href="<?= $admin_url ?>/pages/testimonial/">

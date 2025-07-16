@@ -23,11 +23,14 @@
     <!-- Form Wizard Script -->
     <script src="<?= $admin_url ?>/assets/js/plugins/form-wizard.js"></script>
 
+    <!-- Datepicker Script -->
+    <script src="<?= $admin_url ?>/assets/vendor/flatpickr/dist/flatpickr.min.js"></script>
+
     <!-- AOS Animation Plugin-->
     <script src="<?= $admin_url ?>/assets/vendor/aos/dist/aos.js"></script>
 
     <!-- App Script -->
-    <script src="<?= $admin_url ?>/assets/js/hope-ui.js" defer></script>
+    <script src="<?= $admin_url ?>/assets/js/hope-ui.js"></script>
 
     <!-- sweet alert -->
     <script src="<?= $admin_url ?>/assets/js/sweetalert2.all.min.js"></script>
@@ -43,6 +46,19 @@
         let active = "<?= $active ?>";
         let navActive = active.split(".")[0];
         $("." + navActive).addClass('active');
+
+        // swal warning - start
+        const warning = (error) => {
+            Swal.fire({
+                title: error,
+                icon: 'warning',
+                customClass: {
+                    confirmButton: 'my-swal-confirm-button',
+                },
+            });
+            return false;
+        };
+        // swal warning - end
 
         // user logout
         const logoutPopup = () => {
