@@ -11,7 +11,6 @@ function pdfGenration($pitem, $oid, $view = false)
     $options = new Options();
     $options->set('isRemoteEnabled', true);
     $options->set('enable_html5_parser', true);
-    $options->set('isFontSubsettingEnabled', true); // NEW
     $dompdf = new Dompdf($options);
 
     // Tell Dompdf about this font
@@ -138,7 +137,7 @@ function pdfGenration($pitem, $oid, $view = false)
         $html .= '<tr class="rbd">
                         <td>' . $k . '</td>
                         <td>' . $item['alignment'] . '</td>
-                        <td colspan="2">' . $prd->p_name . '<br /><span style="font-family: NotoSansTamil;">' .  $item['tamil_name'] . '</span></td>
+                        <td colspan="2">' . $prd->p_name . '</td>
                         <td>' . number_format($prd->p_mrp, 2) . '</td>
                         <td>' . $prd->p_quantity . '</td>
                         <td>' . number_format($prd->p_price, 2) . '</td>
