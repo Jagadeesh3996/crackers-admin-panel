@@ -106,7 +106,7 @@ while ($row = mysqli_fetch_array($presult)) {
             $html .= '
                                                                 <tr>
                                                                     <td class="w-small">' . $sno . '</td>
-                                                                    <td>' . $items['name'] . ' (' . $items['type'] . ')</td>
+                                                                    <td>' . $items['name'] . ' (' . $items['type'] . ') <br />' . $items['tamil_name'] . '</td>
                                                                     <td><s>' . $mrp . '</s></td>
                                                                     <td>' . $disprice . '</td>
                                                                     <td></td>
@@ -124,7 +124,7 @@ $html .= '
                 </html>';
 
 // Initialize dompdf
-$dompdf->loadHtml($html);
+$dompdf->loadHtml($html, 'UTF-8');
 $dompdf->setPaper('letter', 'portrait');
 $dompdf->render();
 $dompdf->stream("Price_List_'.$site_name.'.pdf", ["Attachment" => false]);
