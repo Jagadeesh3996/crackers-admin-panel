@@ -34,7 +34,8 @@ function pdfGenration($pitem, $oid, $view = false)
                                 font-family: "NotoSansTamil";
                                 src: url("assets/fonts/NotoSansTamil.ttf") format("truetype");
                             }
-                            body {
+                            body,
+                            td {
                                 font-family: "NotoSansTamil";
                                 font-size: 14px;
                             }
