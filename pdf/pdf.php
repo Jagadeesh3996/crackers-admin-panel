@@ -176,16 +176,16 @@ function pdfGenration($pitem, $oid, $view = false)
         </body>
     </html>';
 
-    echo($html);
+    // echo($html);
     // Initialize dompdf
-    // $dompdf->loadHtml($html, 'UTF-8');
-    // $dompdf->setPaper('letter', 'portrait');
-    // $dompdf->render();
+    $dompdf->loadHtml($html, 'UTF-8');
+    $dompdf->setPaper('letter', 'portrait');
+    $dompdf->render();
 
-    // if ($view) {
-    //     $dompdf->stream("'$site_name'_'$dateonly'.pdf", ["Attachment" => false]);
-    // } else {
-    //     file_put_contents(__DIR__ . '/price_estimation_' . $oid . '.pdf', $dompdf->output());
-    //     return true;
-    // }
+    if ($view) {
+        $dompdf->stream("'$site_name'_'$dateonly'.pdf", ["Attachment" => false]);
+    } else {
+        file_put_contents(__DIR__ . '/price_estimation_' . $oid . '.pdf', $dompdf->output());
+        return true;
+    }
 }
