@@ -12,7 +12,7 @@ $options->set('enable_html5_parser', true);
 $dompdf = new Dompdf($options);
 
 // Tell Dompdf about this font
-$dompdf->getOptions()->setChroot(__DIR__ . '/../');
+// $dompdf->getOptions()->setChroot(__DIR__ . '/../');
 
 
 // Create HTML content for the PDF
