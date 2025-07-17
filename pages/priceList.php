@@ -11,18 +11,24 @@ $options->set('isRemoteEnabled', true);
 $options->set('enable_html5_parser', true);
 $dompdf = new Dompdf($options);
 
+// Tell Dompdf about this font
+$dompdf->getOptions()->setChroot(__DIR__ . '/../');
+
+
 // Create HTML content for the PDF
 $html = '
                 <!DOCTYPE html>
                 <html>
                     <head>
                         <title>Price List</title>
-                        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-                        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
                         <style>
+                            @font-face {
+                                font-family: "NotoSansTamil";
+                                src: url("assets/fonts/NotoSansTamil.ttf") format("truetype");
+                            }
                             body {
-                                font-family: Poppins;
-                                font-style: normal;
+                                font-family: "NotoSansTamil";
+                                font-size: 14px;
                             }
                             table tr th,
                             table tr td{
