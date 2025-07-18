@@ -32,12 +32,15 @@ $html = '
             <html lang="en" dir="ltr">
                  <head>
                     <title>REPORTS</title>
+                    <link rel="preconnect" href="https://fonts.googleapis.com">
+                    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@100..900&display=swap" rel="stylesheet">
                     <style>
                         body {
                             border: 0;
                             margin: 0;
-                            font-family: "Arial", sans-serif;
-                            font-size: 12px;
+                            font-family: "Noto Sans Tamil", sans-serif;
+                            font-size: 14px;
                         }
                         h1 { text-align: center; }
                         td, th { padding: 5px; border: 1px solid #000; text-align: center; }
