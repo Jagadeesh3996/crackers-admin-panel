@@ -9,7 +9,7 @@ function exportCategory()
     $sql_columns = "SHOW COLUMNS FROM tbl_category";
     $result_columns = $conn->query($sql_columns);
 
-    $skip_headers = ['id', 'status', 'created_on']; // headers to skip
+    $skip_headers = ['id', 'status', 'created_on', 'modified_on']; // headers to skip
 
     // Fetch column names
     $headers = array();
@@ -41,7 +41,7 @@ function exportProduct()
     $sql_columns = "SHOW COLUMNS FROM tbl_product";
     $result_columns = $conn->query($sql_columns);
 
-    $skip_headers = ['id', 'section', 'status', 'created_on', 'modified_on']; // headers to skip
+    $skip_headers = ['id', 'status', 'created_on', 'modified_on']; // headers to skip
 
     // Fetch column names
     $headers = array();

@@ -95,7 +95,7 @@ function AddImages()
                 exit;
             }
         }
-        
+
         // Decode the JSON string to an array
         $decoded_oldimages = json_decode($oldimages, true); // true gives associative array
 
@@ -182,6 +182,9 @@ function Import()
     extract($_REQUEST);
     global $conn;
 
+    // Define allowed headers (database columns)
+    $allowed_headers = ['category', 'name', 'tamil_name', 'images', 'mrp', 'selling_price', 'type', 'url', 'alignment']; // Replace with actual column names
+
     // Check the image
     if (isset($_FILES['csv_file'])) {
         // Get file details
@@ -192,17 +195,35 @@ function Import()
 
         // Assuming the first row contains column headers
         $headers = array_shift($csv_data);
+        // try {
+        //     // Iterate through the CSV data and insert into the database
+        //     foreach ($csv_data as $row) {
+        //         $query6 = "INSERT INTO tbl_product (" . implode(',', $headers) . ") VALUES ('" . implode("','", $row) . "')";
+        //         if (!mysqli_query($conn, $query6)) {
+        //             echo "Error: " . mysqli_error($conn);
+        //         }
+        //     }
+        //     echo "Success";
+        // } catch (Exception $e) {
+        //     echo "Error Uploading file!" . $e;
+        // }
         try {
-            // Iterate through the CSV data and insert into the database
             foreach ($csv_data as $row) {
-                $query6 = "INSERT INTO tbl_product (" . implode(',', $headers) . ") VALUES ('" . implode("','", $row) . "')";
-                if (!mysqli_query($conn, $query6)) {
+                // Map row data to corresponding allowed headers
+                $filtered_row = array_combine($headers, $row);
+                $filtered_row = array_intersect_key($filtered_row, array_flip($allowed_headers));
+
+                // Construct the SQL query
+                $query5 = "INSERT INTO tbl_product (" . implode(',', array_keys($filtered_row)) . ") 
+                           VALUES ('" . implode("','", array_values($filtered_row)) . "')";
+
+                if (!mysqli_query($conn, $query5)) {
                     echo "Error: " . mysqli_error($conn);
                 }
             }
             echo "Success";
         } catch (Exception $e) {
-            echo "Error Uploading file!" . $e;
+            echo "Error: " . $e->getMessage();
         }
     } else {
         echo "File Not Found!";
