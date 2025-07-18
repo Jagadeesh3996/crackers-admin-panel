@@ -107,9 +107,9 @@ function pdfGenration($pitem, $oid, $view = false)
                                         <p>Name : <b>' . $pitem['name'] . '</b></p>
                                         <p>Mobile : <b>' . $pitem['phone'] . '</b></p>
                                         <p>Whatsapp : <b>' . $pitem['whatsapp'] . '</b></p>
-                                        <p class="tamil">E-Mail Id : <b>' . $pitem['email'] . '</b></p>
-                                        <p class="tamil">Address : <b>' . $pitem['address'] . '</b></p>
-                                        <p class="tamil">Refer by : <b>' . $pitem['refer'] . '</b></p>
+                                        <p>E-Mail Id : <b>' . $pitem['email'] . '</b></p>
+                                        <p>Address : <b>' . $pitem['address'] . '</b></p>
+                                        <p>Refer by : <b>' . $pitem['refer'] . '</b></p>
                                     </td>
                                     <td colspan="4" class="none">
                                         <h4><center><b>Bank Details</b></center></h4>
@@ -142,7 +142,7 @@ function pdfGenration($pitem, $oid, $view = false)
         $html .= '<tr class="rbd">
                         <td>' . $k . '</td>
                         <td>' . $item['alignment'] . '</td>
-                        <td colspan="2">' . $prd->p_name . '<br /><span class="tamil">' . $prd->p_tname . '</span></td>
+                        <td colspan="2">' . $prd->p_name . '<br /><span>' . $prd->p_tname . '</span></td>
                         <td>' . number_format($prd->p_mrp, 2) . '</td>
                         <td>' . $prd->p_quantity . '</td>
                         <td>' . number_format($prd->p_price, 2) . '</td>
