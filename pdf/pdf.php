@@ -33,13 +33,6 @@ function pdfGenration($pitem, $oid, $view = false)
                         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
                         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@100..900&display=swap" rel="stylesheet">
                         <style>
-                            .tamil {
-                              font-family: "Noto Sans Tamil", sans-serif;
-                              font-optical-sizing: auto;
-                              font-weight: 400;
-                              font-style: normal;
-                              font-variation-settings: "wdth" 100;
-                            }
                             body{
                                 font-family: "Noto Sans Tamil", sans-serif;
                                 font-size: 14px;
