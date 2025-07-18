@@ -183,7 +183,7 @@ function pdfGenration($pitem, $oid, $view = false)
     if ($view) {
         $dompdf->stream("'$site_name'_'$dateonly'.pdf", ["Attachment" => false]);
     } else {
-        file_put_contents(__DIR__ . '/price_estimation_' . $oid . '.pdf', $dompdf->output());
+        file_put_contents(__DIR__ . '/pdf/price_estimation_' . $oid . '.pdf', $dompdf->output());
         return true;
     }
 }

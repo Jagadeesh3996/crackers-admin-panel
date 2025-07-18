@@ -50,15 +50,9 @@ if ($item = mysqli_fetch_array($result)) {
                         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
                         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@100..900&display=swap" rel="stylesheet">
                         <style>
-                            .tamil {
-                              font-family: "Noto Sans Tamil", sans-serif;
-                              font-optical-sizing: auto;
-                              font-weight: 400;
-                              font-style: normal;
-                              font-variation-settings: "wdth" 100;
-                            }
                             body {
-                                font-family: "Arial", sans-serif;
+                                font-family: "Noto Sans Tamil", sans-serif;
+                                font-size: 14px;
                             }
                             td{
                                 padding: 5px;
@@ -127,13 +121,13 @@ if ($item = mysqli_fetch_array($result)) {
                                 <tr>
                                     <td colspan="8" class="none rline">
                                         <h4><center><b>Customer Details</b></center></h4>
-                                        <p class="tamil">Name : <b>' . $c_name . '</b></p>
+                                        <p>Name : <b>' . $c_name . '</b></p>
                                         <p>Mobile: <b>' . $c_mobile . '</b></p>
                                         <p>Whatsapp : <b>' . $c_whatsno . '</b></p>
                                         <p>Id Proof : <b>' . $c_idproof . '</b></p>
                                         <p>Id Number : <b>' . $c_idnumber . '</b></p>
                                         <p>Mode of Payment : <b>' . $c_mop . '</b></p>
-                                        <p class="tamil">Address : <b>' . $c_address . '</b></p>
+                                        <p>Address : <b>' . $c_address . '</b></p>
                                         <p>GST No : <b>' . $c_gstno . '</b></p>
                                     </td>
                                 </tr>
