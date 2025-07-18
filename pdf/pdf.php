@@ -29,10 +29,20 @@ function pdfGenration($pitem, $oid, $view = false)
                 <html>
                     <head>
                         <title>Estimate Report</title>
+                        <link rel="preconnect" href="https://fonts.googleapis.com">
+                        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@100..900&display=swap" rel="stylesheet">
                         <style>
                             @font-face {
                                 font-family: "NotoSansTamil";
                                 src: url("assets/fonts/NotoSansTamil.ttf") format("truetype");
+                            }
+                            .tamil {
+                              font-family: "Noto Sans Tamil", sans-serif;
+                              font-optical-sizing: auto;
+                              font-weight: 400;
+                              font-style: normal;
+                              font-variation-settings: "wdth" 100;
                             }
                             body{
                                 font-family: "NotoSansTamil";
@@ -98,12 +108,12 @@ function pdfGenration($pitem, $oid, $view = false)
                                 <tr>
                                     <td colspan="4" class="none rline">
                                         <h4><center><b>Customer Details</b></center></h4>
-                                        <p>Name : <b>' . $pitem['name'] . '</b></p>
+                                        <p class="tamil">Name : <b>' . $pitem['name'] . '</b></p>
                                         <p>Mobile : <b>' . $pitem['phone'] . '</b></p>
                                         <p>Whatsapp : <b>' . $pitem['whatsapp'] . '</b></p>
                                         <p>E-Mail Id : <b>' . $pitem['email'] . '</b></p>
-                                        <p>Address : <b>' . $pitem['address'] . '</b></p>
-                                        <p>Refer by : <b>' . $pitem['refer'] . '</b></p>
+                                        <p class="tamil">Address : <b>' . $pitem['address'] . '</b></p>
+                                        <p class="tamil">Refer by : <b>' . $pitem['refer'] . '</b></p>
                                     </td>
                                     <td colspan="4" class="none">
                                         <h4><center><b>Bank Details</b></center></h4>
@@ -130,7 +140,7 @@ function pdfGenration($pitem, $oid, $view = false)
         $totalqty += $prd->p_quantity;
         $nettotal += $prd->p_nettotal;
         $p_id = $prd->p_id;
-        $q2 = "SELECT * FROM tbl_product WHERE id = '$p_id' AND status >= 1 LIMIT 1";
+        $q2 = "SELECT alignment FROM tbl_product WHERE id = '$p_id' AND status >= 1 LIMIT 1";
         $res2 = mysqli_query($conn, $q2);
         $item = mysqli_fetch_array($res2);
         $html .= '<tr class="rbd">
