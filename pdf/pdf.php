@@ -146,7 +146,7 @@ function pdfGenration($pitem, $oid, $view = false)
         $html .= '<tr class="rbd">
                         <td>' . $k . '</td>
                         <td>' . $item['alignment'] . '</td>
-                        <td colspan="2">' . $prd->p_name . '</td>
+                        <td colspan="2">' . $prd->p_name . '<br /><span class="tamil">' . $prd->p_tname . '</span></td>
                         <td>' . number_format($prd->p_mrp, 2) . '</td>
                         <td>' . $prd->p_quantity . '</td>
                         <td>' . number_format($prd->p_price, 2) . '</td>
