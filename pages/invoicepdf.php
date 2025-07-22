@@ -8,7 +8,7 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 
 $options = new Options();
-$dompdf->set('isRemoteEnabled', true);
+$options->set('isRemoteEnabled', true);
 $options->set('enable_html5_parser', true);
 $dompdf = new Dompdf($options);
 
