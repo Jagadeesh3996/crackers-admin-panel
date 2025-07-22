@@ -111,8 +111,8 @@ if ($item = mysqli_fetch_array($result)) {
                                     <td colspan="4" class="bline right">GST No : <b>' . $site_gst_no . '</b></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="3" class="bline"><center><img height="100" src="' . $admin_url . '/assets/images/logo.png" alt="logo" ></center></td>
-                                    <td colspan="4" class="bline"><center>
+                                    <td colspan="1" class="bline"><center><img height="100" src="' . $admin_url . '/assets/images/logo.png" alt="logo" ></center></td>
+                                    <td colspan="6" class="bline"><center>
                                         <h2><b>' . $site_name . '</b></h2>
                                         <p>' . $site_address . '</p>
                                     </center></td>

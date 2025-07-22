@@ -173,6 +173,29 @@ function StatusChange($table)
     }
 }
 
+function GetStatus()
+{
+    extract($_REQUEST);
+    global $conn;
+
+    // Prepared statement to prevent SQL injection
+    $stmt = $conn->prepare("SELECT order_id, final_total, status
+                            FROM tbl_orders
+                            WHERE (email = ? OR phone = ?)
+                              AND order_id = ?");
+    $stmt->bind_param("sss", $user_input, $user_input, $order_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result && $row = $result->fetch_assoc()) {
+        echo json_encode(['status' => true, 'data' => $row]);
+    } else {
+        echo json_encode(['status' => false, 'message' => 'No Order Found']);
+    }
+
+    $stmt->close();
+}
+
 switch ($_REQUEST['req_type']) {
 
     case 'add':
@@ -197,5 +220,13 @@ switch ($_REQUEST['req_type']) {
 
     case 'statusct':
         StatusChange('tbl_contact');
+        break;
+
+    case 'getStatus':
+        GetStatus();
+        break;
+
+    default:
+        echo 'No Action Found';
         break;
 }
