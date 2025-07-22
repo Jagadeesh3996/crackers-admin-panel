@@ -177,7 +177,7 @@ if ($item = mysqli_fetch_array($result)) {
                 </html>';
 
     // Initialize dompdf
-    $dompdf->loadHtml($html);
+    $dompdf->loadHtml($html, 'UTF-8');
     $dompdf->setPaper('letter', 'portrait');
     $dompdf->render();
     $dompdf->stream("'$site_name'_'$bid'_'$dateonly'.pdf", ["Attachment" => false]);

@@ -13,9 +13,6 @@ function pdfGenration($pitem, $oid, $view = false)
     $options->set('enable_html5_parser', true);
     $dompdf = new Dompdf($options);
 
-    // Tell Dompdf about this font
-    // $dompdf->getOptions()->setChroot(__DIR__ . '/../');
-
     $date = $pitem['date'];
     $total = $pitem['total'];
     $pcharge = $pitem['packing_charge'];
