@@ -2,24 +2,33 @@
 include('./utilities/session.php');
 
 // Fetch data from the database
-$query = "SELECT p.*, c.discount FROM tbl_product p JOIN tbl_category c ON p.category = c.name WHERE p.status >= 1 and c.status = 1 GROUP BY CAST(SUBSTRING_INDEX(p.alignment, ' ', 1) AS UNSIGNED), SUBSTRING(p.alignment, LOCATE(' ', p.alignment) + 1) ASC";
+$query = "SELECT COUNT(*) AS total FROM (
+            SELECT 
+                CAST(SUBSTRING_INDEX(p.alignment, ' ', 1) AS UNSIGNED) AS align_num,
+                SUBSTRING(p.alignment, LOCATE(' ', p.alignment) + 1) AS align_text
+            FROM tbl_product p
+            JOIN tbl_category c ON p.category = c.name
+            WHERE p.status >= 1 AND c.status = 1
+            GROUP BY align_num, align_text
+        ) AS grouped_rows";
 
 $result = mysqli_query($conn, $query);
-$totalProduct = mysqli_num_rows($result);
-
+$row = mysqli_fetch_assoc($result);
+$totalProduct = $row['total'];
+    
 // Fetch data from the database
-$query2 = "SELECT * FROM tbl_orders GROUP BY order_id";
+$query2 = "SELECT * FROM tbl_orders WHERE status = 1 GROUP BY order_id";
 $result2 = mysqli_query($conn, $query2);
 $totalEstimate = mysqli_num_rows($result2);
 
 // Fetch data from the database
 $todayDate = date("Y-m-d");
-$query3 = "SELECT * FROM tbl_orders WHERE date = '$todayDate' GROUP BY order_id";
+$query3 = "SELECT * FROM tbl_orders WHERE date = '$todayDate' AND status = 1 GROUP BY order_id";
 $result3 = mysqli_query($conn, $query3);
 $todayOrder = mysqli_num_rows($result3);
 
 // Fetch data from the database
-$query4 = "SELECT * FROM tbl_billing GROUP BY bid";
+$query4 = "SELECT * FROM tbl_billing WHERE status = 1 GROUP BY bid";
 $result4 = mysqli_query($conn, $query4);
 $totalBilling = mysqli_num_rows($result4);
 

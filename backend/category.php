@@ -35,7 +35,7 @@ function Delete()
     extract($_REQUEST);
     global $conn;
     
-    $query3 = "UPDATE tbl_category SET status = 0 WHERE id = '$id' ";
+    $query3 = "UPDATE tbl_category SET status = 0 AND alignment = null WHERE id = '$id' ";
     // $query3 = "DELETE FROM tbl_category WHERE id = '$id'";
 
     if (mysqli_query($conn, $query3)) {
