@@ -1,7 +1,7 @@
 <?php
 error_reporting(0);
-$conn = mysqli_connect("localhost", "u342669607_newadmin", 'jV[1Y@eV3', "u342669607_newadmin");
-// $conn = mysqli_connect("localhost", "root", "", "demo");
+// $conn = mysqli_connect("localhost", "u342669607_newadmin", 'jV[1Y@eV3', "u342669607_newadmin");
+$conn = mysqli_connect("localhost", "root", "", "demo");
 date_default_timezone_set("Asia/Kolkata");
 if (!$conn) {
     echo "not connected database";
@@ -26,14 +26,14 @@ $site_status = $data['website_status'];
 $site_data = json_decode($data['shop_details'], true);
 
 // for local
-// $domain = "localhost/kickvy";
-// $site_url = $protocol . '://' . $domain . '/site';
-// $admin_url = $protocol . '://' . $domain . '/admin';
+$domain = "localhost/kickvy";
+$site_url = $protocol . '://' . $domain . '/site';
+$admin_url = $protocol . '://' . $domain . '/admin';
 
 // for live
-$domain = $site_data['shop_url'];
-$site_url = $protocol . '://newsite.' . $domain;
-$admin_url = $protocol . '://newadmin.' . $domain;
+// $domain = $site_data['shop_url'];
+// $site_url = $protocol . '://newsite.' . $domain;
+// $admin_url = $protocol . '://newadmin.' . $domain;
 $site_name = $site_data['shop_name'];
 $site_code = $site_data['shop_code'];
 $billing_discount = $site_data['billing_discount'];

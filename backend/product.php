@@ -42,8 +42,8 @@ function Add()
                 exit;
             }
         }
-        $uploaded_files = json_encode($uploaded_files);
     }
+    $uploaded_files = json_encode($uploaded_files);
 
     $query2 = "INSERT INTO tbl_product (category, name, tamil_name, images, mrp, selling_price, type, url, alignment) VALUES ('$category', '$name', '$tamil_name', '$uploaded_files', '$mrp', '$selling_price', '$type', '$vurl', '$alignment')";
     $result2 = mysqli_query($conn, $query2);
@@ -142,7 +142,8 @@ function Delete()
     extract($_REQUEST);
     global $conn;
     // query
-    $query3 = "UPDATE tbl_product SET status = 0 AND alignment = null WHERE id = '$id' ";
+    $query3 = "DELETE FROM tbl_product WHERE id = '$id'";
+
     if (mysqli_query($conn, $query3)) {
         echo "Success";
     } else {
