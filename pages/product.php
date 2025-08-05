@@ -2,6 +2,10 @@
 include('../utilities/session.php');
 
 // Fetch data from the database
+// $query = "SELECT * FROM tbl_product WHERE status>='1' GROUP BY 
+//       CAST(SUBSTRING_INDEX(alignment, ' ', 1) AS UNSIGNED), 
+//       SUBSTRING(alignment, LOCATE(' ', alignment) + 1)";
+
 $query = "SELECT a.* 
             FROM tbl_product AS a 
             LEFT JOIN tbl_category AS b ON b.name = a.category 
@@ -420,9 +424,11 @@ $productlist = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
         // store alignment - start
         const store = () => {
-            $(".alignment").each((index, element) => {
+            const table = $('#datatable').DataTable();
+            const allRows = table.rows().nodes(); // All DOM rows across pages
+            $(allRows).find(".alignment").each((index, element) => {
                 let val = $(element).val();
-                if (val != "") {
+                if (val !== "") {
                     alignArr.push(val);
                 }
             });
