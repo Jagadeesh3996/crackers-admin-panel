@@ -214,9 +214,14 @@ function Import()
                 $filtered_row = array_combine($headers, $row);
                 $filtered_row = array_intersect_key($filtered_row, array_flip($allowed_headers));
 
+                // Escape each value to prevent SQL errors
+                $escaped_values = array_map(function ($value) use ($conn) {
+                    return mysqli_real_escape_string($conn, $value);
+                }, array_values($filtered_row));
+
                 // Construct the SQL query
                 $query5 = "INSERT INTO tbl_product (" . implode(',', array_keys($filtered_row)) . ") 
-                           VALUES ('" . implode("','", array_values($filtered_row)) . "')";
+                           VALUES ('" . implode("','", array_values($escaped_values)) . "')";
 
                 if (!mysqli_query($conn, $query5)) {
                     echo "Error: " . mysqli_error($conn);
