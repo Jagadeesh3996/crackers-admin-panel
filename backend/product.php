@@ -45,6 +45,11 @@ function Add()
     }
     $uploaded_files = json_encode($uploaded_files);
 
+    // Escape special characters
+    $category = mysqli_real_escape_string($conn, $category);
+    $name = mysqli_real_escape_string($conn, $name);
+    $tamil_name = mysqli_real_escape_string($conn, $tamil_name);
+
     $query2 = "INSERT INTO tbl_product (category, name, tamil_name, images, mrp, selling_price, type, url, alignment) VALUES ('$category', '$name', '$tamil_name', '$uploaded_files', '$mrp', '$selling_price', '$type', '$vurl', '$alignment')";
     $result2 = mysqli_query($conn, $query2);
     if ($result2) {
@@ -155,6 +160,11 @@ function Edit()
 {
     extract($_REQUEST);
     global $conn;
+
+    // Escape special characters
+    $edit_category = mysqli_real_escape_string($conn, $edit_category);
+    $edit_name = mysqli_real_escape_string($conn, $edit_name);
+    $edit_tamil_name = mysqli_real_escape_string($conn, $edit_tamil_name);
 
     $query4 = "UPDATE tbl_product SET category='$edit_category', name='$edit_name', tamil_name='$edit_tamil_name', mrp='$edit_mrp', selling_price='$edit_selling_price', type='$edit_type', url='$edit_vurl', alignment='$edit_alignment' WHERE id = '$edit_id'";
     $result4 = mysqli_query($conn, $query4);
