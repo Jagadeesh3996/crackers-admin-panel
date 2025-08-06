@@ -22,6 +22,9 @@ function Add()
     extract($_REQUEST);
     global $conn;
 
+    // Escape special characters
+    $name = mysqli_real_escape_string($conn, $name);
+
     $query2 = "INSERT INTO tbl_category (name, discount, alignment) VALUES ('$name', '$discount', '$alignment')";
     if (mysqli_query($conn, $query2)) {
         echo "Success";
@@ -48,6 +51,9 @@ function Edit()
 {
     extract($_REQUEST);
     global $conn;
+
+    // Escape special characters
+    $name = mysqli_real_escape_string($conn, $name);
 
     $query4 = "UPDATE tbl_category SET name = '$name', discount = '$discount', alignment = '$alignment' WHERE id = '$id'";
     if (mysqli_query($conn, $query4)) {
