@@ -2,7 +2,7 @@
 include('../utilities/session.php');
 
 // Fetch data from the database
-$query = "SELECT * FROM tbl_orders where status='2' order by date DESC, id DESC";
+$query = "SELECT * FROM tbl_orders where status = 5 order by date DESC, id DESC";
 $result = mysqli_query($conn, $query);
 $orderItems = mysqli_fetch_all($result, MYSQLI_ASSOC);
 ?>
@@ -59,7 +59,7 @@ $orderItems = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="datatable" class="table table-striped" data-toggle="data-table">
+                                <table id="datatable" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th class="text-center">S.No</th>
@@ -93,7 +93,7 @@ $orderItems = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                                     <button class="btn btn-success" onclick="openPopUp(<?= $id ?>, <?= $oitem['phone']; ?>, '<?= $oitem['email']; ?>')">Send</button>
                                                 </td>
                                                 <td>
-                                                    <a class='btn btn-sm btn-icon btn-success' href='orderpdf.php?oid=<?= $oitem['order_id'] ?>' target='_blank' data-bs-toggle='tooltip' title='View' data-bs-placement='top'>
+                                                    <a class='btn btn-sm btn-icon btn-success' href='<?= $admin_url ?>/pages/orderpdf?oid=<?= $oitem['order_id'] ?>' target='_blank' data-bs-toggle='tooltip' title='View' data-bs-placement='top'>
                                                         <svg class='icon-20' width='20' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512' stroke='currentColor'>
                                                             <path fill='#fff' d='M288 80c-65.2 0-118.8 29.6-159.9 67.7C89.6 183.5 63 226 49.4 256c13.6 30 40.2 72.5 78.6 108.3C169.2 402.4 222.8 432 288 432s118.8-29.6 159.9-67.7C486.4 328.5 513 286 526.6 256c-13.6-30-40.2-72.5-78.6-108.3C406.8 109.6 353.2 80 288 80zM95.4 112.6C142.5 68.8 207.2 32 288 32s145.5 36.8 192.6 80.6c46.8 43.5 78.1 95.4 93 131.1c3.3 7.9 3.3 16.7 0 24.6c-14.9 35.7-46.2 87.7-93 131.1C433.5 443.2 368.8 480 288 480s-145.5-36.8-192.6-80.6C48.6 356 17.3 304 2.5 268.3c-3.3-7.9-3.3-16.7 0-24.6C17.3 208 48.6 156 95.4 112.6zM288 336c44.2 0 80-35.8 80-80s-35.8-80-80-80c-.7 0-1.3 0-2 0c1.3 5.1 2 10.5 2 16c0 35.3-28.7 64-64 64c-5.5 0-10.9-.7-16-2c0 .7 0 1.3 0 2c0 44.2 35.8 80 80 80zm0-208a128 128 0 1 1 0 256 128 128 0 1 1 0-256z' />
                                                         </svg>
@@ -174,6 +174,29 @@ $orderItems = mysqli_fetch_all($result, MYSQLI_ASSOC);
     <!-- script - end -->
 
     <script>
+        // get the params
+        const urlParams = new URLSearchParams(window.location.search);
+        const pageParam = parseInt(urlParams.get("p")) || 1;
+        const lengthParam = parseInt(urlParams.get("l")) || 10;
+
+        // table Initialize
+        const table = $('#datatable').DataTable();
+
+        // set number of items per page
+        table.page.len(lengthParam).draw();
+
+        // Set page number (after setting length!)
+        table.page(pageParam - 1).draw('page');
+
+        // When page number changes, update URL
+        table.on('page.dt length.dt', function() {
+            const info = table.page.info();
+            const currentPage = info.page + 1;
+            const currentLength = table.page.len();
+            const newUrl = `<?= $admin_url ?>/pages/transport?p=${currentPage}&l=${currentLength}`;
+            history.replaceState(null, '', newUrl);
+        });
+
         $('#overlay').hide();
 
         // close popup

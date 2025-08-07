@@ -17,13 +17,13 @@ $row = mysqli_fetch_assoc($result);
 $totalProduct = $row['total'];
     
 // Fetch data from the database
-$query2 = "SELECT * FROM tbl_orders WHERE status = 1 GROUP BY order_id";
+$query2 = "SELECT * FROM tbl_orders WHERE status >= 1 GROUP BY order_id";
 $result2 = mysqli_query($conn, $query2);
 $totalEstimate = mysqli_num_rows($result2);
 
 // Fetch data from the database
 $todayDate = date("Y-m-d");
-$query3 = "SELECT * FROM tbl_orders WHERE date = '$todayDate' AND status = 1 GROUP BY order_id";
+$query3 = "SELECT * FROM tbl_orders WHERE date = '$todayDate' AND status >= 1 GROUP BY order_id";
 $result3 = mysqli_query($conn, $query3);
 $todayOrder = mysqli_num_rows($result3);
 

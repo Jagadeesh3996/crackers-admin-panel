@@ -7,9 +7,9 @@
         // Query to fetch state details
         $query = "SELECT date_column as date, SUM(count) AS value
                     FROM (
-                        SELECT date AS date_column, COUNT(*) AS count FROM tbl_billing WHERE status = 2 GROUP BY date ASC
+                        SELECT date AS date_column, COUNT(*) AS count FROM tbl_billing WHERE status = 5 GROUP BY date ASC
                         UNION ALL
-                        SELECT date AS date_column, COUNT(*) AS count FROM tbl_orders WHERE status = 2 GROUP BY date ASC
+                        SELECT date AS date_column, COUNT(*) AS count FROM tbl_orders WHERE status = 5 GROUP BY date ASC
                     ) AS subquery
                     GROUP BY date ASC";
 

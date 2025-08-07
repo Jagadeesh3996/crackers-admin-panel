@@ -80,7 +80,7 @@ $categorylist = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="datatable" class="table table-striped" data-toggle="data-table">
+                                <table id="datatable" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th style="width:7%">
@@ -241,6 +241,29 @@ $categorylist = mysqli_fetch_all($result, MYSQLI_ASSOC);
     <!-- script - end -->
 
     <script>
+        // get the params
+        const urlParams = new URLSearchParams(window.location.search);
+        const pageParam = parseInt(urlParams.get("p")) || 1;
+        const lengthParam = parseInt(urlParams.get("l")) || 10;
+
+        // table Initialize
+        const table = $('#datatable').DataTable();
+
+        // set number of items per page
+        table.page.len(lengthParam).draw();
+
+        // Set page number (after setting length!)
+        table.page(pageParam - 1).draw('page');
+
+        // When page number changes, update URL
+        table.on('page.dt length.dt', function() {
+            const info = table.page.info();
+            const currentPage = info.page + 1;
+            const currentLength = table.page.len();
+            const newUrl = `<?= $admin_url ?>/pages/category?p=${currentPage}&l=${currentLength}`;
+            history.replaceState(null, '', newUrl);
+        });
+
         $('#overlay').hide();
         $('#editoverlay').hide();
         $('#importoverlay').hide();
@@ -249,9 +272,10 @@ $categorylist = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
         // store alignment - start
         const store = () => {
-            $(".alignment").each((index, element) => {
+            const allRows = table.rows().nodes(); // All DOM rows across pages
+            $(allRows).find(".alignment").each((index, element) => {
                 let val = $(element).val();
-                if (val != "") {
+                if (val !== "") {
                     alignArr.push(val);
                 }
             });

@@ -1,11 +1,6 @@
 <?php
 include('../utilities/session.php');
 
-// Fetch data from the database
-// $query = "SELECT * FROM tbl_product WHERE status>='1' GROUP BY 
-//       CAST(SUBSTRING_INDEX(alignment, ' ', 1) AS UNSIGNED), 
-//       SUBSTRING(alignment, LOCATE(' ', alignment) + 1)";
-
 $query = "SELECT a.* 
             FROM tbl_product AS a 
             LEFT JOIN tbl_category AS b ON b.name = a.category 
@@ -90,7 +85,7 @@ $productlist = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="datatable" class="table table-striped" data-toggle="data-table">
+                                <table id="datatable" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>
@@ -409,6 +404,29 @@ $productlist = mysqli_fetch_all($result, MYSQLI_ASSOC);
     <!-- script - end -->
 
     <script>
+        // get the params
+        const urlParams = new URLSearchParams(window.location.search);
+        const pageParam = parseInt(urlParams.get("p")) || 1;
+        const lengthParam = parseInt(urlParams.get("l")) || 10;
+
+        // table Initialize
+        const table = $('#datatable').DataTable();
+        
+        // set number of items per page
+        table.page.len(lengthParam).draw();
+    
+        // Set page number (after setting length!)
+        table.page(pageParam - 1).draw('page');
+        
+        // When page number changes, update URL
+        table.on('page.dt length.dt', function () {
+            const info = table.page.info();
+            const currentPage = info.page + 1;
+            const currentLength = table.page.len();
+            const newUrl = `<?= $admin_url ?>/pages/product?p=${currentPage}&l=${currentLength}`;
+            history.replaceState(null, '', newUrl);
+        });
+
         $('#overlay').hide();
         $('#editoverlay').hide();
         $("#editImages").hide();
@@ -424,7 +442,6 @@ $productlist = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
         // store alignment - start
         const store = () => {
-            const table = $('#datatable').DataTable();
             const allRows = table.rows().nodes(); // All DOM rows across pages
             $(allRows).find(".alignment").each((index, element) => {
                 let val = $(element).val();
