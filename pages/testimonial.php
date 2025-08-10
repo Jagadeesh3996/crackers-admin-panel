@@ -60,7 +60,7 @@ $testimonial = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                     <div class="col-lg-4 col-md-6 col-12">
                                         <div class="card p-3" style="background: #E6F5F6;border:none">
                                             <h6 class="text-center mb-2"><?= $data['name']; ?></h6>
-                                            <img class="img-fluid rounded-circle m-auto" style="width: 150px;height:150px;padding:10px" src="<?= $admin_url ?>/uploads/testimonials/<?= $data['image'] ?>" alt="profile-image" />
+                                            <img class="img-fluid rounded-circle m-auto" style="width: 150px;height:150px;padding:10px" src="<?= $admin_url ?>/uploads/<?= $data['image'] ?>" alt="profile-image" />
                                             <p class="text-center mb-0">“ <?= $data['review']; ?> ”</p>
                                             <a style="position:absolute;left:0;top:0" class='width-fit-content btn btn-sm btn-icon btn-warning' onclick="editItem(<?= $data['id']; ?>)" data-bs-toggle='tooltip' data-bs-placement='top' title='Edit'>
                                                 <span class='btn-inner'>

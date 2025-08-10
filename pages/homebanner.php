@@ -62,7 +62,7 @@ $hbanner = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                 <?php foreach ($hbanner as $data): ?>
                                     <div class="col-md-6 col-12">
                                         <div class="card p-3" style="background: #E6F5F6;border:none">
-                                            <img class="img-fluid m-auto" style="width:100%;height: 250px" src="<?= $admin_url ?>/uploads/homebanners/<?= $data['banner']; ?>" alt="banner">
+                                            <img class="img-fluid m-auto" style="width:100%;height: 250px" src="<?= $admin_url ?>/uploads/<?= $data['banner']; ?>" alt="banner">
                                             <a style="position: absolute;right:0;top:0" class='width-fit-content btn btn-sm btn-icon btn-danger' onclick="delItem(<?= $data['id']; ?>, '<?= $data['banner']; ?>')" data-bs-toggle='tooltip' data-bs-placement='top' title='Delete'>
                                                 <span class='btn-inner'>
                                                     <svg class='icon-20' width='20' viewBox='0 0 24 24' fill='none'

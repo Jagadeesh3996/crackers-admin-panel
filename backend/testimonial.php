@@ -10,7 +10,7 @@ function Add()
     if (isset($_FILES['image']) && is_array($_FILES['image']['name'])) {
 
         // Choose a directory to store the uploaded images
-        $upload_directory = realpath(__DIR__ . "/../uploads/testimonials");
+        $upload_directory = realpath(__DIR__ . "/../uploads");
 
         // Check if the directory already exists
         if (!is_dir($upload_directory)) {
@@ -77,7 +77,7 @@ function Delete()
     $result2 = mysqli_query($conn, $query2);
     if ($result2) {
         // Delete the image file from server
-        $imagePath = "../uploads/testimonials/" . $name;
+        $imagePath = "../uploads/" . $name;
         if (file_exists($imagePath)) {
             unlink($imagePath);
         }
@@ -112,7 +112,7 @@ function Edit()
     if (isset($_FILES['image']) && is_array($_FILES['image']['name'])) {
 
         // Choose a directory to store the uploaded images
-        $upload_directory = realpath(__DIR__ . "/../uploads/testimonials");
+        $upload_directory = realpath(__DIR__ . "/../uploads");
 
         // Check if the directory already exists
         if (!is_dir($upload_directory)) {

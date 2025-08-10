@@ -20,7 +20,7 @@ function Add($table)
         $image_name = uniqid() . '.webp';
 
         // Choose a directory to store the uploaded images
-        $upload_directory = '../uploads/homebanners';
+        $upload_directory = '../uploads';
 
         // Move the uploaded image to the chosen directory
         $target_path = $upload_directory . '/' . $image_name;
@@ -95,7 +95,7 @@ function Delete($table)
 
     if ($deleteResult) {
         // Delete the image file from server
-        $imagePath = "../uploads/homebanners/" . $name;
+        $imagePath = "../uploads/" . $name;
         if (file_exists($imagePath)) {
             unlink($imagePath);
         }
