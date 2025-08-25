@@ -94,7 +94,7 @@ $contacts = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                                 <td><input type="checkbox" name="checkbox" class="checkbox" value=<?= $id ?> /></td>
                                                 <td><?= $serialNumber++ ?></td>
                                                 <td><?= $date ?></td>
-                                                <td><?= $data['name'] ?></td>
+                                                <td><?= $data['fname'] ?></td>
                                                 <td><?= $data['mail'] ?></td>
                                                 <td><?= $data['phone'] ?></td>
                                                 <td style="white-space: break-spaces;"><?= $data['message'] ?></td>

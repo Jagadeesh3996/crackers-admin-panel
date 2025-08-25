@@ -16,6 +16,13 @@ $bank_details = $row['bank_details'] == null ? '{}' : $row['bank_details'];
 <!-- head Start -->
 <?php include('../utilities/head.php'); ?>
 <!-- head END -->
+<style>
+    @media (max-width:576px) {
+        .espage {
+            flex-direction: column;
+        }
+    }
+</style>
 
 <body>
     <!-- loader Start -->
@@ -44,7 +51,7 @@ $bank_details = $row['bank_details'] == null ? '{}' : $row['bank_details'];
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header">
-                            <div class="d-flex form-group">
+                            <div class="d-flex form-group espage">
                                 <h3 class="card-title text-dark m-0 mt-1">Estimate Page Status : </h3>
                                 <input type="checkbox" name="website_status" id="website_status" class="togglebox2" <?= $row['website_status'] == 1 ? 'checked' : ''; ?> onchange="webStatus()" />
                                 <label for="website_status" class="toggle2 ps-2 pt-1 ms-2 mt-1 text-white"><b>Running&nbsp;&nbsp;Shut&nbsp;Down</b></label>
