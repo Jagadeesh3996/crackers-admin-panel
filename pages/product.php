@@ -217,7 +217,7 @@ $productlist = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                 if ($result2) {
                                     // Loop through categories and populate the dropdown
                                     while ($row2 = mysqli_fetch_assoc($result2)) {
-                                        echo "<option value='{$row2['name']}'>{$row2['name']}</option>";
+                                        echo "<option value='" . htmlspecialchars($row2['name'], ENT_QUOTES) . "'>" . htmlspecialchars($row2['name']) . "</option>";
                                     }
                                 } else {
                                     echo "<option value=''>Error fetching categories</option>";
@@ -303,7 +303,7 @@ $productlist = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                 if ($result3) {
                                     // Loop through categories and populate the dropdown
                                     while ($row3 = mysqli_fetch_assoc($result3)) {
-                                        echo "<option value='{$row3['name']}'>{$row3['name']}</option>";
+                                        echo "<option value='" . htmlspecialchars($row2['name'], ENT_QUOTES) . "'>" . htmlspecialchars($row2['name']) . "</option>";
                                     }
                                 } else {
                                     echo "<option value=''>Error fetching categories</option>";
@@ -411,13 +411,13 @@ $productlist = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
         // table Initialize
         const table = $('#datatable').DataTable();
-        
+
         // set number of items per page
         table.page.len(lengthParam).draw();
-    
+
         // Set page number (after setting length!)
         table.page(pageParam - 1).draw('page');
-        
+
         // When page number changes, update URL
         table.on('page.dt length.dt', function () {
             const info = table.page.info();
@@ -813,7 +813,7 @@ $productlist = mysqli_fetch_all($result, MYSQLI_ASSOC);
         $(document).ready(function() {
             // open add popup          
             $('#showPopup').click(() => {
-                $("#alignment").val((isNaN(parseInt(alignArr[alignArr.length - 1])) ? 0 : parseInt(alignArr[alignArr.length - 1])) + 1);
+                $("#alignment").val(alignArr.length > 0 ? (Math.max(...alignArr) + 1) : 1);
                 $('#overlay').show();
             });
 
